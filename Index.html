@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galvez Garage | Gestión</title>
+    <title>Galvez Garage | Base64 Edition</title>
     <style>
         :root { --primary: #ff2c00; --bg: #0f172a; --card: #1e293b; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #fff; margin: 0; }
@@ -30,7 +30,7 @@
 <div id="login" class="screen active">
     <div class="container">
         <h1>🔧 Galvez Garage</h1>
-        <input type="text" id="placaInput" placeholder="INGRESA TU PLACA (o código admin)">
+        <input type="text" id="placaInput" placeholder="INGRESA TU PLACA">
         <button id="btnEntrar" onclick="entrar()">Ingresar</button>
     </div>
 </div>
@@ -38,9 +38,8 @@
 <div id="cliente" class="screen">
     <div class="container">
         <button onclick="location.reload()" style="background:#334155; width: auto; padding: 5px 15px;">⬅ Salir</button>
-        <h2>📋 Datos de tu Moto</h2>
         <div id="infoMoto"></div>
-        <h2>🛠️ Historial de Servicios</h2>
+        <h2>🛠️ Historial</h2>
         <div id="historial"></div>
     </div>
 </div>
@@ -51,28 +50,25 @@
         <h2>⚙️ Panel Administrador</h2>
 
         <div class="card">
-            <h3>Registrar Nueva Moto</h3>
-            <input id="placa" placeholder="Número de Placa">
-            <input id="clienteNombre" placeholder="Nombre del Cliente">
-            <input id="marca" placeholder="Marca (Ej: TVS)">
-            <input id="modelo" placeholder="Modelo (Ej: Apache 160)">
+            <h3>Registrar Moto (Base64)</h3>
+            <input id="placa" placeholder="Placa">
+            <input id="clienteNombre" placeholder="Cliente">
+            <input id="marca" placeholder="Marca">
+            <input id="modelo" placeholder="Modelo">
             <input id="hp" placeholder="HP">
             <input id="torque" placeholder="Torque Nm">
             <input id="velocidad" placeholder="Velocidad Máx">
-            <label style="font-size: 12px; color: #94a3b8;">Foto de la moto:</label>
             <input type="file" id="foto" accept="image/*">
             <button id="btnGuardar" onclick="guardarMoto()">Guardar Moto</button>
         </div>
 
         <div class="card">
-            <h3>Subir Reporte de Servicio</h3>
-            <input id="placaServicio" placeholder="Placa de la moto">
+            <h3>Subir Servicio</h3>
+            <input id="placaServicio" placeholder="Placa">
             <select id="tipo">
-                <option value="Mantenimiento Mayor">Mantenimiento Mayor</option>
-                <option value="Mantenimiento Menor">Mantenimiento Menor</option>
-                <option value="Reparación General">Reparación General</option>
+                <option>Mayor</option>
+                <option>Menor</option>
             </select>
-            <label style="font-size: 12px; color: #94a3b8;">Archivo PDF:</label>
             <input type="file" id="pdf" accept="application/pdf">
             <button id="btnServicio" onclick="subirServicio()">Subir PDF</button>
         </div>
@@ -82,14 +78,13 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+    import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-    // CONFIGURACIÓN CORREGIDA
     const firebaseConfig = {
         apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
         authDomain: "reports-e956a.firebaseapp.com",
         projectId: "reports-e956a",
-        storageBucket: "reports-e956a.firebasestorage.app", // Usamos el dominio más reciente
+        storageBucket: "reports-e956a.firebasestorage.app",
         messagingSenderId: "1058914487818",
         appId: "1:1058914487818:web:ef0e53d4a400cb85a199f3"
     };
@@ -100,89 +95,69 @@
 
     const ADMIN_CODE = "ADMIN123";
 
-    function show(screenId) {
+    function show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-        window.scrollTo(0,0);
+        document.getElementById(id).classList.add('active');
     }
+
+    // Función auxiliar para convertir archivo a Base64
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 
     // LOGIN
     window.entrar = async function() {
         const placa = document.getElementById('placaInput').value.trim().toUpperCase();
-        if(!placa) return alert("Ingresa una placa");
+        if(placa === ADMIN_CODE) return show('admin');
 
-        if(placa === ADMIN_CODE) {
-            show('admin');
-            return;
-        }
+        const docRef = doc(db, "motos", placa);
+        const snap = await getDoc(docRef);
 
-        const btn = document.getElementById('btnEntrar');
-        btn.disabled = true;
-        btn.innerText = "Buscando...";
+        if(!snap.exists()) return alert("No encontrada");
 
-        try {
-            const snap = await getDoc(doc(db, "motos", placa));
-            if(!snap.exists()) {
-                alert("Placa no encontrada en el sistema.");
-                btn.disabled = false;
-                btn.innerText = "Ingresar";
-                return;
-            }
+        const data = snap.data();
+        document.getElementById("infoMoto").innerHTML = `
+            <div class="card">
+                <img src="${data.foto}">
+                <h2>${data.marca} ${data.modelo}</h2>
+                <p><b>Placa:</b> ${placa}</p>
+                <p><b>Cliente:</b> ${data.cliente}</p>
+                <p><b>HP:</b> ${data.hp} | <b>Torque:</b> ${data.torque}</p>
+            </div>
+        `;
 
-            const data = snap.data();
-            document.getElementById("infoMoto").innerHTML = `
-                <div class="card">
-                    <img src="${data.foto || 'https://via.placeholder.com/400x200?text=Sin+Foto'}">
-                    <p><strong>Propietario:</strong> ${data.cliente}</p>
-                    <p><strong>Vehículo:</strong> ${data.marca} ${data.modelo}</p>
-                    <hr style="border:0; border-top:1px solid #334155">
-                    <p>⚡ <strong>${data.hp}</strong> HP | ⚙️ <strong>${data.torque}</strong> Nm | 🏁 <strong>${data.velocidad}</strong> Km/h</p>
-                </div>
-            `;
-
-            // Cargar Historial Ordenado
-            const serviciosRef = collection(db, "motos", placa, "servicios");
-            const q = query(serviciosRef, orderBy("fechaTimestamp", "desc"));
-            const querySnapshot = await getDocs(q);
-            
-            let html = "";
-            querySnapshot.forEach(doc => {
-                const s = doc.data();
-                html += `
-                    <div class="card">
-                        <p style="margin:0; font-weight:bold; color:var(--primary)">${s.tipo}</p>
-                        <p style="font-size:0.9em; color:#94a3b8">Fecha: ${s.fecha}</p>
-                        <a href="${s.pdf}" target="_blank">📄 Ver Reporte Técnico (PDF)</a>
-                    </div>
-                `;
-            });
-
-            document.getElementById("historial").innerHTML = html || "<p style='text-align:center'>No hay servicios registrados.</p>";
-            show("cliente");
-
-        } catch (e) {
-            console.error(e);
-            alert("Error al conectar con la base de datos.");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Ingresar";
-        }
+        const servRef = collection(db, "motos", placa, "servicios");
+        const q = query(servRef, orderBy("fechaTimestamp", "desc"));
+        const servSnap = await getDocs(q);
+        
+        let html = "";
+        servSnap.forEach(d => {
+            const s = d.data();
+            html += `<div class="card"><b>${s.tipo}</b><br>${s.fecha}<br><a href="${s.pdf}" target="_blank">📄 Ver PDF</a></div>`;
+        });
+        document.getElementById("historial").innerHTML = html;
+        show("cliente");
     }
 
-    // REGISTRAR MOTO
+    // GUARDAR MOTO CON BASE64
     window.guardarMoto = async function() {
         const btn = document.getElementById('btnGuardar');
-        const placa = document.getElementById('placa').value.trim().toUpperCase();
+        const placa = document.getElementById('placa').value.toUpperCase();
         const file = document.getElementById('foto').files[0];
 
-        if(!placa || !file) return alert("Placa y Foto son obligatorias");
-
+        if(!file || !placa) return alert("Faltan datos");
         btn.disabled = true;
-        btn.innerText = "Subiendo imagen...";
 
         try {
-            const storageRef = ref(storage, `motos/${placa}/${Date.now()}_${file.name}`);
-            await uploadBytes(storageRef, file);
+            // Convertimos a string Base64
+            const base64String = await toBase64(file);
+            const storageRef = ref(storage, `motos/${placa}/foto_perfil`);
+
+            // Subimos como String (data_url indica que es base64 con encabezado)
+            await uploadString(storageRef, base64String, 'data_url');
             const url = await getDownloadURL(storageRef);
 
             await setDoc(doc(db, "motos", placa), {
@@ -195,47 +170,45 @@
                 foto: url
             });
 
-            alert("✅ Moto guardada con éxito");
+            alert("Moto registrada");
             location.reload();
         } catch (e) {
             console.error(e);
-            alert("Error al guardar: " + e.message);
+            alert("Error");
             btn.disabled = false;
         }
     }
 
-    // SUBIR SERVICIO
+    // SUBIR SERVICIO CON BASE64
     window.subirServicio = async function() {
         const btn = document.getElementById('btnServicio');
-        const placa = document.getElementById('placaServicio').value.trim().toUpperCase();
+        const placa = document.getElementById('placaServicio').value.toUpperCase();
         const file = document.getElementById('pdf').files[0];
 
-        if(!placa || !file) return alert("Falta placa o archivo PDF");
-
+        if(!file) return alert("Falta PDF");
         btn.disabled = true;
-        btn.innerText = "Subiendo PDF...";
 
         try {
-            const storageRef = ref(storage, `servicios/${placa}/${Date.now()}_${file.name}`);
-            await uploadBytes(storageRef, file);
+            const base64PDF = await toBase64(file);
+            const storageRef = ref(storage, `servicios/${placa}/${Date.now()}`);
+
+            await uploadString(storageRef, base64PDF, 'data_url');
             const url = await getDownloadURL(storageRef);
 
             await addDoc(collection(db, "motos", placa, "servicios"), {
                 tipo: document.getElementById('tipo').value,
                 fecha: new Date().toLocaleDateString(),
-                fechaTimestamp: new Date(), // Para ordenar
+                fechaTimestamp: new Date(),
                 pdf: url
             });
 
-            alert("✅ Servicio registrado correctamente");
+            alert("Servicio subido");
             location.reload();
         } catch (e) {
             console.error(e);
-            alert("Error al subir servicio.");
             btn.disabled = false;
         }
     }
 </script>
-
 </body>
 </html>
