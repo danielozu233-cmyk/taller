@@ -1,206 +1,240 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galvez Garage</title>
-
-<style>
-body{font-family:Arial;background:#0f172a;color:#fff;margin:0}
-.screen{display:none;padding:20px}
-.active{display:block}
-.container{max-width:500px;margin:auto}
-input,button,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none}
-button{background:#ff2c00;color:#fff;font-weight:bold}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin-top:10px}
-img{width:100%;border-radius:10px}
-h1,h2{text-align:center}
-a{color:#25D366}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galvez Garage | Gestión</title>
+    <style>
+        :root { --primary: #ff2c00; --bg: #0f172a; --card: #1e293b; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #fff; margin: 0; }
+        .screen { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .active { display: block; }
+        .container { max-width: 500px; margin: auto; }
+        input, button, select { 
+            width: 100%; padding: 12px; margin: 8px 0; 
+            border-radius: 8px; border: 1px solid #334155; 
+            background: #1e293b; color: #fff; box-sizing: border-box;
+        }
+        button { background: var(--primary); border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #cc2400; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        .card { background: var(--card); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
+        img { width: 100%; border-radius: 10px; margin-bottom: 10px; display: block; }
+        h1, h2, h3 { text-align: center; color: var(--primary); }
+        a { color: #25D366; text-decoration: none; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login" class="screen active">
-  <div class="container">
-    <h1>🔧 Galvez Garage</h1>
-    <input id="placaInput" placeholder="Ingresa tu placa">
-    <button onclick="entrar()">Ingresar</button>
-  </div>
+    <div class="container">
+        <h1>🔧 Galvez Garage</h1>
+        <input type="text" id="placaInput" placeholder="INGRESA TU PLACA (o código admin)">
+        <button id="btnEntrar" onclick="entrar()">Ingresar</button>
+    </div>
 </div>
 
-<!-- CLIENTE -->
 <div id="cliente" class="screen">
-  <div class="container">
-    <h2>📋 Información</h2>
-    <div id="infoMoto"></div>
-
-    <h2>🛠️ Historial</h2>
-    <div id="historial"></div>
-  </div>
+    <div class="container">
+        <button onclick="location.reload()" style="background:#334155; width: auto; padding: 5px 15px;">⬅ Salir</button>
+        <h2>📋 Datos de tu Moto</h2>
+        <div id="infoMoto"></div>
+        <h2>🛠️ Historial de Servicios</h2>
+        <div id="historial"></div>
+    </div>
 </div>
 
-<!-- ADMIN -->
 <div id="admin" class="screen">
-  <div class="container">
+    <div class="container">
+        <button onclick="location.reload()" style="background:#334155; width: auto; padding: 5px 15px;">⬅ Volver</button>
+        <h2>⚙️ Panel Administrador</h2>
 
-    <h2>⚙️ Admin</h2>
+        <div class="card">
+            <h3>Registrar Nueva Moto</h3>
+            <input id="placa" placeholder="Número de Placa">
+            <input id="clienteNombre" placeholder="Nombre del Cliente">
+            <input id="marca" placeholder="Marca (Ej: TVS)">
+            <input id="modelo" placeholder="Modelo (Ej: Apache 160)">
+            <input id="hp" placeholder="HP">
+            <input id="torque" placeholder="Torque Nm">
+            <input id="velocidad" placeholder="Velocidad Máx">
+            <label style="font-size: 12px; color: #94a3b8;">Foto de la moto:</label>
+            <input type="file" id="foto" accept="image/*">
+            <button id="btnGuardar" onclick="guardarMoto()">Guardar Moto</button>
+        </div>
 
-    <h3>Registrar Moto</h3>
-    <input id="placa" placeholder="Placa">
-    <input id="clienteNombre" placeholder="Cliente">
-    <input id="marca" placeholder="Marca">
-    <input id="modelo" placeholder="Modelo">
-    <input id="hp" placeholder="HP">
-    <input id="torque" placeholder="Torque Nm">
-    <input id="velocidad" placeholder="Velocidad Máx">
-    <input type="file" id="foto">
-    <button onclick="guardarMoto()">Guardar Moto</button>
-
-    <h3>Subir Servicio</h3>
-    <input id="placaServicio" placeholder="Placa">
-    <select id="tipo">
-      <option>Mayor</option>
-      <option>Menor</option>
-    </select>
-    <input type="file" id="pdf">
-    <button onclick="subirServicio()">Subir Servicio</button>
-
-  </div>
+        <div class="card">
+            <h3>Subir Reporte de Servicio</h3>
+            <input id="placaServicio" placeholder="Placa de la moto">
+            <select id="tipo">
+                <option value="Mantenimiento Mayor">Mantenimiento Mayor</option>
+                <option value="Mantenimiento Menor">Mantenimiento Menor</option>
+                <option value="Reparación General">Reparación General</option>
+            </select>
+            <label style="font-size: 12px; color: #94a3b8;">Archivo PDF:</label>
+            <input type="file" id="pdf" accept="application/pdf">
+            <button id="btnServicio" onclick="subirServicio()">Subir PDF</button>
+        </div>
+    </div>
 </div>
 
 <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+    // CONFIGURACIÓN CORREGIDA
+    const firebaseConfig = {
+        apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
+        authDomain: "reports-e956a.firebaseapp.com",
+        projectId: "reports-e956a",
+        storageBucket: "reports-e956a.firebasestorage.app", // Usamos el dominio más reciente
+        messagingSenderId: "1058914487818",
+        appId: "1:1058914487818:web:ef0e53d4a400cb85a199f3"
+    };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
-  authDomain: "reports-e956a.firebaseapp.com",
-  projectId: "reports-e956a",
-storageBucket: "reports-e956a.firebasestorage.app",
-  messagingSenderId: "1058914487818",
-  appId: "1:1058914487818:web:ef0e53d4a400cb85a199f3"
-};
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+    const ADMIN_CODE = "ADMIN123";
 
-const ADMIN_CODE = "ADMIN123";
+    function show(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        window.scrollTo(0,0);
+    }
 
-// navegación
-function show(screen){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(screen).classList.add('active');
-}
+    // LOGIN
+    window.entrar = async function() {
+        const placa = document.getElementById('placaInput').value.trim().toUpperCase();
+        if(!placa) return alert("Ingresa una placa");
 
-// LOGIN
-window.entrar = async function(){
-  const placa = document.getElementById('placaInput').value.toUpperCase();
+        if(placa === ADMIN_CODE) {
+            show('admin');
+            return;
+        }
 
-  if(placa === ADMIN_CODE){
-    show('admin');
-    return;
-  }
+        const btn = document.getElementById('btnEntrar');
+        btn.disabled = true;
+        btn.innerText = "Buscando...";
 
-  const refDoc = doc(db, "motos", placa);
-  const snap = await getDoc(refDoc);
+        try {
+            const snap = await getDoc(doc(db, "motos", placa));
+            if(!snap.exists()) {
+                alert("Placa no encontrada en el sistema.");
+                btn.disabled = false;
+                btn.innerText = "Ingresar";
+                return;
+            }
 
-  if(!snap.exists()){
-    alert("No existe");
-    return;
-  }
+            const data = snap.data();
+            document.getElementById("infoMoto").innerHTML = `
+                <div class="card">
+                    <img src="${data.foto || 'https://via.placeholder.com/400x200?text=Sin+Foto'}">
+                    <p><strong>Propietario:</strong> ${data.cliente}</p>
+                    <p><strong>Vehículo:</strong> ${data.marca} ${data.modelo}</p>
+                    <hr style="border:0; border-top:1px solid #334155">
+                    <p>⚡ <strong>${data.hp}</strong> HP | ⚙️ <strong>${data.torque}</strong> Nm | 🏁 <strong>${data.velocidad}</strong> Km/h</p>
+                </div>
+            `;
 
-  const data = snap.data();
+            // Cargar Historial Ordenado
+            const serviciosRef = collection(db, "motos", placa, "servicios");
+            const q = query(serviciosRef, orderBy("fechaTimestamp", "desc"));
+            const querySnapshot = await getDocs(q);
+            
+            let html = "";
+            querySnapshot.forEach(doc => {
+                const s = doc.data();
+                html += `
+                    <div class="card">
+                        <p style="margin:0; font-weight:bold; color:var(--primary)">${s.tipo}</p>
+                        <p style="font-size:0.9em; color:#94a3b8">Fecha: ${s.fecha}</p>
+                        <a href="${s.pdf}" target="_blank">📄 Ver Reporte Técnico (PDF)</a>
+                    </div>
+                `;
+            });
 
-  document.getElementById("infoMoto").innerHTML = `
-    <div class="card">
-      <img src="${data.foto}">
-      <p><b>Placa:</b> ${placa}</p>
-      <p><b>Cliente:</b> ${data.cliente}</p>
-      <p><b>Marca:</b> ${data.marca}</p>
-      <p><b>Modelo:</b> ${data.modelo}</p>
-      <p><b>HP:</b> ${data.hp}</p>
-      <p><b>Torque:</b> ${data.torque}</p>
-      <p><b>Velocidad:</b> ${data.velocidad}</p>
-    </div>
-  `;
+            document.getElementById("historial").innerHTML = html || "<p style='text-align:center'>No hay servicios registrados.</p>";
+            show("cliente");
 
-  let html = "";
+        } catch (e) {
+            console.error(e);
+            alert("Error al conectar con la base de datos.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Ingresar";
+        }
+    }
 
-  const serviciosRef = collection(db, "motos", placa, "servicios");
-  const servicios = await getDocs(serviciosRef);
+    // REGISTRAR MOTO
+    window.guardarMoto = async function() {
+        const btn = document.getElementById('btnGuardar');
+        const placa = document.getElementById('placa').value.trim().toUpperCase();
+        const file = document.getElementById('foto').files[0];
 
-  servicios.forEach(doc => {
-    const s = doc.data();
-    html += `
-      <div class="card">
-        <p><b>${s.tipo}</b></p>
-        <p>${s.fecha}</p>
-        <a href="${s.pdf}" target="_blank">📄 Ver PDF</a>
-      </div>
-    `;
-  });
+        if(!placa || !file) return alert("Placa y Foto son obligatorias");
 
-  document.getElementById("historial").innerHTML = html;
+        btn.disabled = true;
+        btn.innerText = "Subiendo imagen...";
 
-  show("cliente");
-}
+        try {
+            const storageRef = ref(storage, `motos/${placa}/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
 
-// SUBIR IMAGEN
-async function subirImagen(file, placa){
-  const storageRef = ref(storage, `motos/${placa}/${file.name}`);
-  await uploadBytes(storageRef, file);
-  return await getDownloadURL(storageRef);
-}
+            await setDoc(doc(db, "motos", placa), {
+                cliente: document.getElementById('clienteNombre').value,
+                marca: document.getElementById('marca').value,
+                modelo: document.getElementById('modelo').value,
+                hp: document.getElementById('hp').value,
+                torque: document.getElementById('torque').value,
+                velocidad: document.getElementById('velocidad').value,
+                foto: url
+            });
 
-// GUARDAR MOTO
-window.guardarMoto = async function(){
-  const placa = document.getElementById('placa').value.toUpperCase();
-  const file = document.getElementById('foto').files[0];
+            alert("✅ Moto guardada con éxito");
+            location.reload();
+        } catch (e) {
+            console.error(e);
+            alert("Error al guardar: " + e.message);
+            btn.disabled = false;
+        }
+    }
 
-  if(!file){
-    alert("Sube una imagen");
-    return;
-  }
+    // SUBIR SERVICIO
+    window.subirServicio = async function() {
+        const btn = document.getElementById('btnServicio');
+        const placa = document.getElementById('placaServicio').value.trim().toUpperCase();
+        const file = document.getElementById('pdf').files[0];
 
-  const url = await subirImagen(file, placa);
+        if(!placa || !file) return alert("Falta placa o archivo PDF");
 
-  await setDoc(doc(db, "motos", placa), {
-    cliente: document.getElementById('clienteNombre').value,
-    marca: document.getElementById('marca').value,
-    modelo: document.getElementById('modelo').value,
-    hp: document.getElementById('hp').value,
-    torque: document.getElementById('torque').value,
-    velocidad: document.getElementById('velocidad').value,
-    foto: url
-  });
+        btn.disabled = true;
+        btn.innerText = "Subiendo PDF...";
 
-  alert("Moto registrada");
-}
+        try {
+            const storageRef = ref(storage, `servicios/${placa}/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
 
-// SUBIR SERVICIO
-window.subirServicio = async function(){
-  const placa = document.getElementById('placaServicio').value.toUpperCase();
-  const tipo = document.getElementById('tipo').value;
-  const file = document.getElementById('pdf').files[0];
+            await addDoc(collection(db, "motos", placa, "servicios"), {
+                tipo: document.getElementById('tipo').value,
+                fecha: new Date().toLocaleDateString(),
+                fechaTimestamp: new Date(), // Para ordenar
+                pdf: url
+            });
 
-  const storageRef = ref(storage, `servicios/${placa}/${Date.now()}_${file.name}`);
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
-
-  await addDoc(collection(db, "motos", placa, "servicios"), {
-    tipo,
-    fecha: new Date().toLocaleDateString(),
-    pdf: url
-  });
-
-  alert("Servicio subido");
-}
-
+            alert("✅ Servicio registrado correctamente");
+            location.reload();
+        } catch (e) {
+            console.error(e);
+            alert("Error al subir servicio.");
+            btn.disabled = false;
+        }
+    }
 </script>
 
 </body>
