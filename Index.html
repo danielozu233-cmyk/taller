@@ -354,14 +354,28 @@ window.subirServicio = async function(){
     const placa = document.getElementById('placaServicio').value.toUpperCase();
     const file = document.getElementById('pdf').files[0];
     if(!file || !placa) return alert("Faltan datos o PDF");
+    
     const pdfBase64 = await toBase64PDF(file);
+
+    // --- CAMBIO AQUÍ: Formato forzado a Día/Mes/Año ---
+    const hoy = new Date();
+    const fechaFormateada = hoy.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
     await addDoc(collection(db, "motos", placa, "servicios"), {
         tipo: document.getElementById('tipo').value,
-        fecha: new Date().toLocaleDateString(),
+        fecha: fechaFormateada, // Ahora se guarda como DD/MM/AAAA
         pdf: pdfBase64
     });
+    
     alert("Servicio cargado correctamente");
-}
+    // Limpiar campos después de subir
+    document.getElementById('pdf').value = "";
+    document.getElementById('placaServicio').value = "";
+}   
 </script>
 </body>
 </html>
