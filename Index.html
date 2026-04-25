@@ -378,7 +378,7 @@
                     <span class="badge-date">${s.fecha}</span>
                     <p style="margin:5px 0 0 0; font-weight:600; color:white">${s.tipo}</p>
                 </div>
-                <a href="${s.pdf}" target="_blank" download="Servicio_${placa}.pdf" class="pdf-link">
+<a href="#" onclick="verPDF('${s.pdf}')" class="pdf-link">
   Ver PDF 📄
 </a>
             </div>
@@ -433,6 +433,21 @@
       document.getElementById('pdf').value = "";
       document.getElementById('placaServicio').value = "";
     }   
+    window.verPDF = function(base64){
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+    const url = URL.createObjectURL(blob);
+
+    window.open(url, '_blank');
+}
   </script>
 </body>
 
