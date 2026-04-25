@@ -1,301 +1,356 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galvez Garage | Premium Service</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galvez Garage | Premium Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary: #e11d48; /* Rojo Racing */
-            --primary-hover: #be123c;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-green: #22c55e;
-        }
+  <style>
+    :root {
+      --primary: #e11d48;
+      /* Rojo Racing */
+      --primary-hover: #be123c;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #22c55e;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            line-height: 1.5;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      margin: 0;
+      line-height: 1.5;
+    }
 
-        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .active { display: block; animation: fadeIn 0.4s ease-out; }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
 
-        .container { max-width: 450px; margin: auto; }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
 
-        /* Estilos de encabezado */
-        h1 { font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; color: var(--text-main); }
-        h2 { font-size: 1.5rem; margin-top: 0; }
-        p { color: var(--text-muted); font-size: 0.95rem; }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* Inputs y Selects */
-        input, select {
-            width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            background: #1e293b;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border 0.3s;
-        }
+    .container {
+      max-width: 450px;
+      margin: auto;
+    }
 
-        input:focus { outline: none; border-color: var(--primary); }
+    /* Estilos de encabezado */
+    h1 {
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
 
-        /* Botones */
-        button {
-            width: 100%;
-            padding: 16px;
-            margin: 12px 0;
-            border-radius: 12px;
-            border: none;
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
 
-        button:active { transform: scale(0.98); }
-        button:hover { background: var(--primary-hover); box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4); }
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
 
-        .linkBtn {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
+    /* Inputs y Selects */
+    input,
+    select {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: white;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border 0.3s;
+    }
 
-        .linkBtn:hover { background: rgba(225, 29, 72, 0.1); }
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
 
-        .btn-back {
-            background: #334155;
-            padding: 8px 16px;
-            width: auto;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-        }
+    /* Botones */
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 12px 0;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        /* Tarjetas */
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
+    button:active {
+      transform: scale(0.98);
+    }
 
-        .img-card {
-            width: 100%;
-            border-radius: 14px;
-            margin-bottom: 15px;
-            object-fit: cover;
-            border: 1px solid #334155;
-            background-color: #fFFFFF;
-        }
+    button:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+    }
 
-        .logo {
-            width: 140px;
-            display: block;
-            margin: 20px auto;
-        }
+    .linkBtn {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
 
-        /* Badge para historial */
-        .badge-date {
-            font-size: 0.75rem;
-            background: #334155;
-            padding: 4px 10px;
-            border-radius: 20px;
-            color: var(--text-muted);
-        }
+    .linkBtn:hover {
+      background: rgba(225, 29, 72, 0.1);
+    }
 
-        .pdf-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--accent-green);
-            text-decoration: none;
-            font-weight: 600;
-        }
+    .btn-back {
+      background: #334155;
+      padding: 8px 16px;
+      width: auto;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
 
-        /* Grid de Info técnica */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            text-align: left;
-            margin-top: 15px;
-        }
+    /* Tarjetas */
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 20px;
+      margin-top: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
 
-        .tech-item {
-            background: rgba(15, 23, 42, 0.5);
-            padding: 10px;
-            border-radius: 10px;
-        }
+    .img-card {
+      width: 100%;
+      border-radius: 14px;
+      margin-bottom: 15px;
+      object-fit: cover;
+      border: 1px solid #334155;
+      background-color: #fFFFFF;
+    }
 
-        .tech-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-        .tech-val { font-size: 0.9rem; font-weight: 600; display: block; }
+    .logo {
+      width: 140px;
+      display: block;
+      margin: 20px auto;
+    }
 
-    </style>
+    /* Badge para historial */
+    .badge-date {
+      font-size: 0.75rem;
+      background: #334155;
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--text-muted);
+    }
+
+    .pdf-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--accent-green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Grid de Info técnica */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      text-align: left;
+      margin-top: 15px;
+    }
+
+    .tech-item {
+      background: rgba(15, 23, 42, 0.5);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .tech-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .tech-val {
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
 
-<div id="login" class="screen active">
+  <div id="login" class="screen active">
     <div class="container" style="text-align: center; padding-top: 40px;">
-        <img src="logo.png" class="logo" alt="Galvez Garage Logo">
-        <h1>GALVEZ GARAGE</h1>
-        <p>Centro de Servicio Especializado</p>
-        
-        <div style="margin-top: 40px;">
-            <input id="placaInput" placeholder="NÚMERO DE PLACA (Eje: M123ABC)">
-            <button onclick="entrar()">Consultar Mi Moto</button>
-            <button class="linkBtn" onclick="show('servicios')">Ver Servicios</button>
-        </div>
-    </div>
-</div>
+      <img src="logo.png" class="logo" alt="Galvez Garage Logo">
+      <h1>GALVEZ GARAGE</h1>
+      <p>Centro de Servicio Especializado</p>
 
-<div id="servicios" class="screen">
+      <div style="margin-top: 40px;">
+        <input id="placaInput" placeholder="NÚMERO DE PLACA (Eje: M123ABC)">
+        <button onclick="entrar()">Consultar Mi Moto</button>
+        <button class="linkBtn" onclick="show('servicios')">Ver Servicios</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="servicios" class="screen">
     <div class="container">
-        <button class="btn-back" onclick="show('login')">← VOLVER</button>
-        <h2>Nuestros Servicios</h2>
-        <p>Mantenimiento con estándares de alta competición.</p>
+      <button class="btn-back" onclick="show('login')">← VOLVER</button>
+      <h2>Nuestros Servicios</h2>
+      <p>Mantenimiento con estándares de alta competición.</p>
 
-        <div class="card">
-            <img src="Mayor.png" class="img-card">
-            <h3>Servicio Mayor</h3>
-            <p>Limpieza profunda de inyectores, ajuste de válvulas, cambio de fluidos y revisión de 25 puntos de seguridad.</p>
-        </div>
+      <div class="card">
+        <img src="Mayor.png" class="img-card">
+        <h3>Servicio Mayor</h3>
+        <p>Limpieza profunda de inyectores, ajuste de válvulas, cambio de fluidos y revisión de 25 puntos de seguridad.
+        </p>
+      </div>
 
-        <div class="card">
-            <img src="Menor.png" class="img-card">
-            <h3>Servicio Menor</h3>
-            <p>Cambio de aceite, filtro y lubricación de cadena. Ideal para mantenimiento preventivo mensual.</p>
-        </div>
+      <div class="card">
+        <img src="Menor.png" class="img-card">
+        <h3>Servicio Menor</h3>
+        <p>Cambio de aceite, filtro y lubricación de cadena. Ideal para mantenimiento preventivo mensual.</p>
+      </div>
     </div>
-</div>
+  </div>
 
-<div id="cliente" class="screen">
+  <div id="cliente" class="screen">
     <div class="container">
-        <button class="btn-back" onclick="location.reload()">← Regresar</button>
-        <div id="infoMoto"></div>
-        <div id="historial"></div>
+      <button class="btn-back" onclick="location.reload()">← Regresar</button>
+      <div id="infoMoto"></div>
+      <div id="historial"></div>
     </div>
-</div>
+  </div>
 
-<div id="admin" class="screen">
+  <div id="admin" class="screen">
     <div class="container">
-        <button class="btn-back" onclick="location.reload()">← SALIR PANEL</button>
-        <h2>Panel Administrativo</h2>
+      <button class="btn-back" onclick="location.reload()">← SALIR PANEL</button>
+      <h2>Panel Administrativo</h2>
 
-        <div class="card">
-            <h3>Registrar Nueva Moto</h3>
-            <input id="placa" placeholder="Placa">
-            <input id="clienteNombre" placeholder="Nombre del Cliente">
-            <input id="marca" placeholder="Marca (ej. Yamaha)">
-            <input id="modelo" placeholder="Modelo (ej. R6)">
-            <div style="display:flex; gap:10px">
-                <input id="hp" placeholder="HP">
-                <input id="torque" placeholder="Torque">
-            </div>
-            <input id="velocidad" placeholder="Velocidad Máxima">
-            <label style="font-size: 0.8rem; color:var(--text-muted)">Foto de la moto:</label>
-            <input type="file" id="foto" accept="image/*">
-            <button onclick="guardarMoto()">Guardar en Base de Datos</button>
+      <div class="card">
+        <h3>Registrar Nueva Moto</h3>
+        <input id="placa" placeholder="Placa">
+        <input id="clienteNombre" placeholder="Nombre del Cliente">
+        <input id="marca" placeholder="Marca (ej. Yamaha)">
+        <input id="modelo" placeholder="Modelo (ej. R6)">
+        <div style="display:flex; gap:10px">
+          <input id="hp" placeholder="HP">
+          <input id="torque" placeholder="Torque">
         </div>
+        <input id="velocidad" placeholder="Velocidad Máxima">
+        <label style="font-size: 0.8rem; color:var(--text-muted)">Foto de la moto:</label>
+        <input type="file" id="foto" accept="image/*">
+        <button onclick="guardarMoto()">Guardar en Base de Datos</button>
+      </div>
 
-        <div class="card" style="margin-bottom: 50px;">
-            <h3>Subir Reporte de Servicio</h3>
-            <input id="placaServicio" placeholder="Placa de la Moto">
-            <select id="tipo">
-                <option>Servicio Mayor</option>
-                <option>Servicio Menor</option>
-                <option>Reparación Motor</option>
-                <option>Sistema Eléctrico</option>
-            </select>
-            <label style="font-size: 0.8rem; color:var(--text-muted)">Reporte PDF:</label>
-            <input type="file" id="pdf" accept="application/pdf">
-            <button onclick="subirServicio()">Adjuntar Servicio</button>
-        </div>
+      <div class="card" style="margin-bottom: 50px;">
+        <h3>Subir Reporte de Servicio</h3>
+        <input id="placaServicio" placeholder="Placa de la Moto">
+        <select id="tipo">
+          <option>Servicio Mayor</option>
+          <option>Servicio Menor</option>
+          <option>Reparación Motor</option>
+          <option>Sistema Eléctrico</option>
+        </select>
+        <label style="font-size: 0.8rem; color:var(--text-muted)">Reporte PDF:</label>
+        <input type="file" id="pdf" accept="application/pdf">
+        <button onclick="subirServicio()">Adjuntar Servicio</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<script type="module">
-// ... (Tu lógica de Firebase se mantiene igual)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <script type="module">
+    // ... (Tu lógica de Firebase se mantiene igual)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
-    authDomain: "reports-e956a.firebaseapp.com",
-    projectId: "reports-e956a"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const ADMIN_CODE = "ADMIN123";
-
-window.show = function(screen){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById(screen).classList.add('active');
-    window.scrollTo(0,0);
-}
-
-// (Funciones toBase64Image y toBase64PDF iguales...)
-async function toBase64Image(file){
-  return new Promise((resolve) => {
-    const img = new Image();
-    const reader = new FileReader();
-    reader.onload = e => img.src = e.target.result;
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const MAX_WIDTH = 600;
-      const scale = MAX_WIDTH / img.width;
-      canvas.width = MAX_WIDTH;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL("image/png"));
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
+      authDomain: "reports-e956a.firebaseapp.com",
+      projectId: "reports-e956a"
     };
-    reader.readAsDataURL(file);
-  });
-}
 
-function toBase64PDF(file){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-window.entrar = async function(){
-    const placa = document.getElementById('placaInput').value.toUpperCase();
-    if(placa === ADMIN_CODE){ show('admin'); return; }
+    const ADMIN_CODE = "ADMIN123";
 
-    const snap = await getDoc(doc(db, "motos", placa));
-    if(!snap.exists()){ alert("La placa no se encuentra registrada."); return; }
+    window.show = function (screen) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screen).classList.add('active');
+      window.scrollTo(0, 0);
+    }
 
-    const data = snap.data();
-    document.getElementById("infoMoto").innerHTML = `
+    // (Funciones toBase64Image y toBase64PDF iguales...)
+    async function toBase64Image(file) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = e => img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 600;
+          const scale = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/png"));
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function toBase64PDF(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    window.entrar = async function () {
+      const placa = document.getElementById('placaInput').value.toUpperCase();
+      if (placa === ADMIN_CODE) { show('admin'); return; }
+
+      const snap = await getDoc(doc(db, "motos", placa));
+      if (!snap.exists()) { alert("La placa no se encuentra registrada."); return; }
+
+      const data = snap.data();
+      document.getElementById("infoMoto").innerHTML = `
         <div class="card">
             ${data.foto ? `<img src="${data.foto}" class="img-card">` : ""}
             <h2 style="margin-bottom:5px">${data.marca} ${data.modelo}</h2>
@@ -310,12 +365,12 @@ window.entrar = async function(){
         </div>
     `;
 
-    let html = "<h2 style='margin-top:30px'>Historial de Mantenimiento</h2>";
-    const servicios = await getDocs(query(collection(db, "motos", placa, "servicios"), orderBy("fecha", "desc")));
-    
-    if(servicios.empty) html += "<p>No hay servicios registrados aún.</p>";
+      let html = "<h2 style='margin-top:30px'>Historial de Mantenimiento</h2>";
+      const servicios = await getDocs(query(collection(db, "motos", placa, "servicios"), orderBy("fecha", "desc")));
 
-    servicios.forEach(doc => {
+      if (servicios.empty) html += "<p>No hay servicios registrados aún.</p>";
+
+      servicios.forEach(doc => {
         const s = doc.data();
         html += `
             <div class="card" style="display:flex; justify-content:space-between; align-items:center">
@@ -323,22 +378,24 @@ window.entrar = async function(){
                     <span class="badge-date">${s.fecha}</span>
                     <p style="margin:5px 0 0 0; font-weight:600; color:white">${s.tipo}</p>
                 </div>
-                <a href="${s.pdf}" target="_blank" class="pdf-link">Ver PDF 📄</a>
+                <a href="${s.pdf}" target="_blank" download="Servicio_${placa}.pdf" class="pdf-link">
+  Ver PDF 📄
+</a>
             </div>
         `;
-    });
-    document.getElementById("historial").innerHTML = html;
-    show("cliente");
-}
+      });
+      document.getElementById("historial").innerHTML = html;
+      show("cliente");
+    }
 
-window.guardarMoto = async function(){
-    const placa = document.getElementById('placa').value.toUpperCase();
-    const file = document.getElementById('foto').files[0];
-    if(!placa) return alert("Ingresa la placa");
-    let base64 = "";
-    if(file) base64 = await toBase64Image(file);
+    window.guardarMoto = async function () {
+      const placa = document.getElementById('placa').value.toUpperCase();
+      const file = document.getElementById('foto').files[0];
+      if (!placa) return alert("Ingresa la placa");
+      let base64 = "";
+      if (file) base64 = await toBase64Image(file);
 
-    await setDoc(doc(db, "motos", placa), {
+      await setDoc(doc(db, "motos", placa), {
         cliente: document.getElementById('clienteNombre').value,
         marca: document.getElementById('marca').value,
         modelo: document.getElementById('modelo').value,
@@ -346,36 +403,37 @@ window.guardarMoto = async function(){
         torque: document.getElementById('torque').value,
         velocidad: document.getElementById('velocidad').value,
         foto: base64
-    });
-    alert("Moto registrada exitosamente");
-}
+      });
+      alert("Moto registrada exitosamente");
+    }
 
-window.subirServicio = async function(){
-    const placa = document.getElementById('placaServicio').value.toUpperCase();
-    const file = document.getElementById('pdf').files[0];
-    if(!file || !placa) return alert("Faltan datos o PDF");
-    
-    const pdfBase64 = await toBase64PDF(file);
+    window.subirServicio = async function () {
+      const placa = document.getElementById('placaServicio').value.toUpperCase();
+      const file = document.getElementById('pdf').files[0];
+      if (!file || !placa) return alert("Faltan datos o PDF");
 
-    // --- CAMBIO AQUÍ: Formato forzado a Día/Mes/Año ---
-    const hoy = new Date();
-    const fechaFormateada = hoy.toLocaleDateString('es-ES', {
+      const pdfBase64 = await toBase64PDF(file);
+
+      // --- CAMBIO AQUÍ: Formato forzado a Día/Mes/Año ---
+      const hoy = new Date();
+      const fechaFormateada = hoy.toLocaleDateString('es-ES', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
-    });
+      });
 
-    await addDoc(collection(db, "motos", placa, "servicios"), {
+      await addDoc(collection(db, "motos", placa, "servicios"), {
         tipo: document.getElementById('tipo').value,
         fecha: fechaFormateada, // Ahora se guarda como DD/MM/AAAA
         pdf: pdfBase64
-    });
-    
-    alert("Servicio cargado correctamente");
-    // Limpiar campos después de subir
-    document.getElementById('pdf').value = "";
-    document.getElementById('placaServicio').value = "";
-}   
-</script>
+      });
+
+      alert("Servicio cargado correctamente");
+      // Limpiar campos después de subir
+      document.getElementById('pdf').value = "";
+      document.getElementById('placaServicio').value = "";
+    }   
+  </script>
 </body>
+
 </html>
