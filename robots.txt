@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://danielozu233-cmyk.github.io/taller/sitemap.xml
