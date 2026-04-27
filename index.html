@@ -14,13 +14,13 @@
   <style>
     :root {
       --primary: #e11d48;
-      /* Rojo Racing */
       --primary-hover: #be123c;
       --bg-dark: #0f172a;
       --card-bg: #1e293b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent-green: #22c55e;
+      --whatsapp: #25d366;
     }
 
     body {
@@ -60,12 +60,10 @@
       margin: auto;
     }
 
-    /* Estilos de encabezado */
     h1 {
       font-weight: 800;
       letter-spacing: -1px;
       margin-bottom: 10px;
-      color: var(--text-main);
     }
 
     h2 {
@@ -78,7 +76,6 @@
       font-size: 0.95rem;
     }
 
-    /* Inputs y Selects */
     input,
     select {
       width: 100%;
@@ -90,15 +87,15 @@
       color: white;
       font-size: 1rem;
       box-sizing: border-box;
-      transition: border 0.3s;
+      transition: all 0.3s;
     }
 
     input:focus {
       outline: none;
       border-color: var(--primary);
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.3);
     }
 
-    /* Botones */
     button {
       width: 100%;
       padding: 16px;
@@ -115,23 +112,19 @@
       letter-spacing: 1px;
     }
 
-    button:active {
-      transform: scale(0.98);
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
-    button:hover {
-      background: var(--primary-hover);
-      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+    button:active {
+      transform: scale(0.98);
     }
 
     .linkBtn {
       background: transparent;
       color: var(--primary);
       border: 2px solid var(--primary);
-    }
-
-    .linkBtn:hover {
-      background: rgba(225, 29, 72, 0.1);
     }
 
     .btn-back {
@@ -142,7 +135,6 @@
       margin-bottom: 20px;
     }
 
-    /* Tarjetas */
     .card {
       background: var(--card-bg);
       padding: 20px;
@@ -157,8 +149,6 @@
       border-radius: 14px;
       margin-bottom: 15px;
       object-fit: cover;
-      border: 1px solid #334155;
-      background-color: #fFFFFF;
     }
 
     .logo {
@@ -167,21 +157,48 @@
       margin: 20px auto;
     }
 
-    /* Badge para historial */
-    .badge-date {
-      font-size: 0.75rem;
-      background: #334155;
-      padding: 4px 10px;
-      border-radius: 20px;
-      color: var(--text-muted);
+    .wsp-float {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--whatsapp);
+      border-radius: 50px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s;
     }
 
-    .pdf-link {
-      display: inline-block;
-      margin-top: 10px;
-      color: var(--accent-green);
+    .history-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 15px;
+    }
+
+    .wsp-float:hover {
+      transform: scale(1.1);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-contact {
       text-decoration: none;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
       font-weight: 600;
+      font-size: 0.9rem;
+      color: white;
     }
 
     /* Grid de Info técnica */
@@ -189,7 +206,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      text-align: left;
       margin-top: 15px;
     }
 
@@ -210,10 +226,20 @@
       font-weight: 600;
       display: block;
     }
+
+    .iwsp {
+      width: 20px;
+      height: 20px;
+      margin-top: 6px;
+    }
   </style>
 </head>
 
 <body>
+
+  <a href="https://wa.me/50246577219" class="wsp-float" target="_blank" title="Agenda tu cita">
+    <span style="font-size: 1.2rem;"><img src="wsp.png" class="iwsp"></span>
+  </a>
 
   <div id="login" class="screen active">
     <div class="container" style="text-align: center; padding-top: 40px;">
@@ -222,9 +248,9 @@
       <p>Centro de Servicio Especializado</p>
 
       <div style="margin-top: 40px;">
-        <input id="placaInput" placeholder="NÚMERO DE PLACA (Eje: M123ABC)">
-        <button onclick="entrar()">Consultar Mi Moto</button>
-        <button class="linkBtn" onclick="show('servicios')">Ver Servicios</button>
+        <input id="placaInput" placeholder="NÚMERO DE PLACA (Eje: M123ABC)" style="text-transform: uppercase;">
+        <button id="btnEntrar" onclick="entrar()">Consultar Mi Moto</button>
+        <button class="linkBtn" onclick="show('servicios')">Ver Servicios & Citas</button>
       </div>
     </div>
   </div>
@@ -232,20 +258,28 @@
   <div id="servicios" class="screen">
     <div class="container">
       <button class="btn-back" onclick="show('login')">← VOLVER</button>
-      <h2>Nuestros Servicios</h2>
-      <p>Mantenimiento con estándares de alta competición.</p>
+      <h2>Servicios y Citas</h2>
+      <p>Mantenimiento profesional para tu motocicleta.</p>
 
       <div class="card">
-        <img src="Mayor.png" class="img-card">
-        <h3>Servicio Mayor</h3>
-        <p>Limpieza profunda de inyectores, ajuste de válvulas, cambio de fluidos y revisión de 25 puntos de seguridad.
-        </p>
+        <img src="Mayor.png" class="img-card" alt="Servicio Mayor">
+        <h3 style="color: var(--primary);">Servicio Mayor</h3>
+        <p>Limpieza profunda, ajuste de válvulas y revisión de 25 puntos.</p>
       </div>
 
       <div class="card">
-        <img src="Menor.png" class="img-card">
+        <img src="Menor.png" class="img-card" alt="Servicio Menor">
         <h3>Servicio Menor</h3>
-        <p>Cambio de aceite, filtro y lubricación de cadena. Ideal para mantenimiento preventivo mensual.</p>
+        <p>Cambio de aceite, filtro y lubricación preventiva.</p>
+      </div>
+
+      <div class="card" style="border: 1px solid var(--primary);">
+        <h3 style="margin-top:0">Agenda tu Cita</h3>
+        <p>Escríbenos directamente para reservar tu espacio:</p>
+        <div class="contact-grid">
+          <a href="https://wa.me/50246577219" class="btn-contact" style="background: var(--whatsapp);">WhatsApp</a>
+          <a href="mailto:galvez.daniel2@icloud.com" class="btn-contact" style="background: #334155;">Correo</a>
+        </div>
       </div>
     </div>
   </div>
@@ -265,7 +299,7 @@
 
       <div class="card">
         <h3>Registrar Nueva Moto</h3>
-        <input id="placa" placeholder="Placa">
+        <input id="placa" placeholder="Placa" style="text-transform: uppercase;">
         <input id="clienteNombre" placeholder="Nombre del Cliente">
         <input id="marca" placeholder="Marca (ej. Yamaha)">
         <input id="modelo" placeholder="Modelo (ej. R6)">
@@ -276,12 +310,12 @@
         <input id="velocidad" placeholder="Velocidad Máxima">
         <label style="font-size: 0.8rem; color:var(--text-muted)">Foto de la moto:</label>
         <input type="file" id="foto" accept="image/*">
-        <button onclick="guardarMoto()">Guardar en Base de Datos</button>
+        <button id="btnGuardar" onclick="guardarMoto()">Guardar en Base de Datos</button>
       </div>
 
       <div class="card" style="margin-bottom: 50px;">
         <h3>Subir Reporte de Servicio</h3>
-        <input id="placaServicio" placeholder="Placa de la Moto">
+        <input id="placaServicio" placeholder="Placa de la Moto" style="text-transform: uppercase;">
         <select id="tipo">
           <option>Servicio Mayor</option>
           <option>Servicio Menor</option>
@@ -290,13 +324,12 @@
         </select>
         <label style="font-size: 0.8rem; color:var(--text-muted)">Reporte PDF:</label>
         <input type="file" id="pdf" accept="application/pdf">
-        <button onclick="subirServicio()">Adjuntar Servicio</button>
+        <button id="btnSubir" onclick="subirServicio()">Adjuntar Servicio</button>
       </div>
     </div>
   </div>
 
   <script type="module">
-    // ... (Tu lógica de Firebase se mantiene igual)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -308,7 +341,6 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     const ADMIN_CODE = "ADMIN123";
 
     window.show = function (screen) {
@@ -317,7 +349,6 @@
       window.scrollTo(0, 0);
     }
 
-    // (Funciones toBase64Image y toBase64PDF iguales...)
     async function toBase64Image(file) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -347,55 +378,76 @@
     }
 
     window.entrar = async function () {
+      const btn = document.getElementById('btnEntrar');
       const placa = document.getElementById('placaInput').value.toUpperCase();
+      if (!placa) return alert("Ingresa una placa");
       if (placa === ADMIN_CODE) { show('admin'); return; }
 
-      const snap = await getDoc(doc(db, "motos", placa));
-      if (!snap.exists()) { alert("La placa no se encuentra registrada."); return; }
+      btn.innerText = "BUSCANDO...";
+      btn.disabled = true;
 
-      const data = snap.data();
-      document.getElementById("infoMoto").innerHTML = `
-        <div class="card">
+      try {
+        const snap = await getDoc(doc(db, "motos", placa));
+        if (!snap.exists()) {
+          alert("La placa no se encuentra registrada.");
+          btn.innerText = "Consultar Mi Moto";
+          btn.disabled = false;
+          return;
+        }
+
+        const data = snap.data();
+        document.getElementById("infoMoto").innerHTML = `
+          <div class="card">
             ${data.foto ? `<img src="${data.foto}" class="img-card">` : ""}
             <h2 style="margin-bottom:5px">${data.marca} ${data.modelo}</h2>
-            <span class="badge-date">Propietario: ${data.cliente}</span>
-            
+            <span style="font-size:0.8rem; color:var(--text-muted)">Propietario: ${data.cliente}</span>
             <div class="tech-grid">
-                <div class="tech-item"><span class="tech-label">Placa</span><span class="tech-val">${placa}</span></div>
-                <div class="tech-item"><span class="tech-label">Potencia</span><span class="tech-val">${data.hp} HP</span></div>
-                <div class="tech-item"><span class="tech-label">Torque</span><span class="tech-val">${data.torque}</span></div>
-                <div class="tech-item"><span class="tech-label">V. Máx</span><span class="tech-val">${data.velocidad}</span></div>
+              <div class="tech-item"><span class="tech-label">Placa</span><span class="tech-val">${placa}</span></div>
+              <div class="tech-item"><span class="tech-label">Potencia</span><span class="tech-val">${data.hp} HP</span></div>
+              <div class="tech-item"><span class="tech-label">Torque</span><span class="tech-val">${data.torque}</span></div>
+              <div class="tech-item"><span class="tech-label">V. Máx</span><span class="tech-val">${data.velocidad}</span></div>
             </div>
-        </div>
-    `;
-
-      let html = "<h2 style='margin-top:30px'>Historial de Mantenimiento</h2>";
-      const servicios = await getDocs(query(collection(db, "motos", placa, "servicios"), orderBy("fecha", "desc")));
-
-      if (servicios.empty) html += "<p>No hay servicios registrados aún.</p>";
-
-      servicios.forEach(doc => {
-        const s = doc.data();
-        html += `
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center">
-                <div>
-                    <span class="badge-date">${s.fecha}</span>
-                    <p style="margin:5px 0 0 0; font-weight:600; color:white">${s.tipo}</p>
-                </div>
-<a href="#" onclick="verPDF('${s.pdf}')" class="pdf-link">
-  Ver PDF 📄
-</a>
-            </div>
+          </div>
         `;
-      });
-      document.getElementById("historial").innerHTML = html;
-      show("cliente");
+
+        let html = "<h2 style='margin-top:30px'>Historial</h2>";
+        const servicios = await getDocs(query(collection(db, "motos", placa, "servicios"), orderBy("fecha", "desc")));
+
+        if (servicios.empty) html += "<p>Sin servicios registrados.</p>";
+        servicios.forEach(doc => {
+          const s = doc.data();
+          html += `
+  <div class="card history-card">
+    <div style="flex: 1;">
+      <span style="font-size:0.7rem; color:var(--text-muted)">${s.fecha}</span>
+      <p style="margin:5px 0 0 0; font-weight:600; color:white">${s.tipo}</p>
+    </div>
+    <div style="margin-right: 10px;"> <a href="#" onclick="verPDF('${s.pdf}')" style="color:var(--accent-green); text-decoration:none; font-weight:700; white-space: nowrap;">
+        PDF 📄
+      </a>
+    </div>
+  </div>
+`;
+        });
+        document.getElementById("historial").innerHTML = html;
+        show("cliente");
+      } catch (e) {
+        alert("Error al consultar.");
+      } finally {
+        btn.innerText = "Consultar Mi Moto";
+        btn.disabled = false;
+      }
     }
 
     window.guardarMoto = async function () {
+      const btn = document.getElementById('btnGuardar');
       const placa = document.getElementById('placa').value.toUpperCase();
       const file = document.getElementById('foto').files[0];
       if (!placa) return alert("Ingresa la placa");
+
+      btn.innerText = "GUARDANDO...";
+      btn.disabled = true;
+
       let base64 = "";
       if (file) base64 = await toBase64Image(file);
 
@@ -408,50 +460,43 @@
         velocidad: document.getElementById('velocidad').value,
         foto: base64
       });
-      alert("Moto registrada exitosamente");
+      alert("Moto registrada");
+      btn.innerText = "Guardar en Base de Datos";
+      btn.disabled = false;
     }
 
     window.subirServicio = async function () {
+      const btn = document.getElementById('btnSubir');
       const placa = document.getElementById('placaServicio').value.toUpperCase();
       const file = document.getElementById('pdf').files[0];
-      if (!file || !placa) return alert("Faltan datos o PDF");
+      if (!file || !placa) return alert("Faltan datos");
+
+      btn.innerText = "SUBIENDO...";
+      btn.disabled = true;
 
       const pdfBase64 = await toBase64PDF(file);
-
-      // --- CAMBIO AQUÍ: Formato forzado a Día/Mes/Año ---
       const hoy = new Date();
-      const fechaFormateada = hoy.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
+      const fecha = hoy.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
       await addDoc(collection(db, "motos", placa, "servicios"), {
         tipo: document.getElementById('tipo').value,
-        fecha: fechaFormateada, // Ahora se guarda como DD/MM/AAAA
+        fecha: fecha,
         pdf: pdfBase64
       });
 
-      alert("Servicio cargado correctamente");
-      // Limpiar campos después de subir
-      document.getElementById('pdf').value = "";
-      document.getElementById('placaServicio').value = "";
-    }   
-    window.verPDF = function(base64){
-    const byteCharacters = atob(base64.split(',')[1]);
-    const byteNumbers = new Array(byteCharacters.length);
-
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      alert("Servicio cargado");
+      btn.innerText = "Adjuntar Servicio";
+      btn.disabled = false;
     }
 
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-    const url = URL.createObjectURL(blob);
-
-    window.open(url, '_blank');
-}
+    window.verPDF = function (base64) {
+      const byteCharacters = atob(base64.split(',')[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      window.open(URL.createObjectURL(blob), '_blank');
+    }
   </script>
 </body>
 
