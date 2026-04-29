@@ -13,280 +13,289 @@
 
   <style>
     :root {
-      --primary: #e11d48;
-      --primary-hover: #be123c;
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
+      --primary: #ff0033;
+      --primary-glow: rgba(255, 0, 51, 0.4);
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.4);
+      --cyan: #0cc0df;
+      --cyan-glow: rgba(12, 192, 223, 0.4);
+      --bg-dark: #050507;
+      --card-bg: rgba(15, 23, 42, 0.7);
+      --text-main: #ffffff;
       --text-muted: #94a3b8;
-      --accent-green: #22c55e;
-      --whatsapp: #25d366;
     }
 
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% -10%, #1e1b4b 0%, transparent 50%),
+        radial-gradient(circle at 0% 100%, #111111 0%, transparent 40%);
       color: var(--text-main);
       margin: 0;
-      line-height: 1.5;
+      padding: 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+      opacity: 0.05;
+      z-index: -1;
     }
 
     .screen {
       display: none;
       min-height: 100vh;
-      padding: 20px;
+      padding: 20px 16px 60px 16px;
       box-sizing: border-box;
     }
 
     .active {
       display: block;
-      animation: fadeIn 0.4s ease-out;
+      animation: premiumFade 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes premiumFade {
+      from { opacity: 0; filter: blur(10px); transform: scale(0.98); }
+      to { opacity: 1; filter: blur(0); transform: scale(1); }
     }
 
     .container {
+      width: 100%;
       max-width: 450px;
       margin: auto;
     }
 
+    /* --- LOGO --- */
+    .logo-container {
+      text-align: center;
+      padding: 60px 0 20px 0;
+    }
+
+    .logo-main {
+      width: 240px;
+      height: auto;
+      filter: drop-shadow(0 0 25px var(--primary-glow));
+      margin-bottom: 15px;
+      animation: logoPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--primary-glow)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 40px var(--primary)); }
+    }
+
     h1 {
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 10px;
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -2px;
+      margin: 0;
+      text-transform: uppercase;
+      font-style: italic;
+      background: linear-gradient(180deg, #ffffff 40%, #71717a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 0;
-    }
-
-    p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    input,
-    select {
+    /* --- INPUT --- */
+    input, select {
       width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      border-radius: 12px;
+      padding: 20px;
+      margin: 12px 0;
+      border-radius: 16px;
       border: 1px solid #334155;
-      background: #1e293b;
+      background: rgba(15, 23, 42, 0.8);
       color: white;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 2px;
       box-sizing: border-box;
-      transition: all 0.3s;
+      transition: 0.3s;
     }
 
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 12px rgba(225, 29, 72, 0.3);
-    }
+    input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
 
+    /* --- BOTONES --- */
     button {
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       margin: 12px 0;
-      border-radius: 12px;
-      border: none;
-      background: var(--primary);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, #334155 0%, #0f172a 100%);
       color: white;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
+      font-weight: 800;
+      font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 1px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
     }
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .btn-servicios-main {
+      background: linear-gradient(135deg, #ff0033 0%, #990022 100%);
+      box-shadow: 0 6px 20px rgba(255, 0, 51, 0.4);
+      animation: pulseButton 2s infinite;
     }
 
-    button:active {
-      transform: scale(0.98);
+    @keyframes pulseButton {
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 0, 51, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
     }
 
-    .linkBtn {
-      background: transparent;
-      color: var(--primary);
-      border: 2px solid var(--primary);
+    button:active { transform: scale(0.96); }
+
+    .btn-pdf {
+      width: auto !important;
+      padding: 12px 20px !important;
+      font-size: 0.8rem !important;
+      margin: 0 !important;
+      background: linear-gradient(135deg, #1e293b 0%, #050505 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn-back {
-      background: #334155;
-      padding: 8px 16px;
-      width: auto;
-      font-size: 0.8rem;
-      margin-bottom: 20px;
+    button::after {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
     }
+    @keyframes shine { 0% { margin-left: -150%; } 100% { margin-left: 150%; } }
 
+    /* --- TARJETAS --- */
     .card {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 20px;
-      margin-top: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+      border-radius: 28px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
-    .img-card {
+    .img-wrapper {
       width: 100%;
-      border-radius: 14px;
-      margin-bottom: 15px;
-      object-fit: cover;
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
+    .img-card { width: 100%; height: auto; object-fit: contain; display: block; }
 
-    .logo {
-      width: 140px;
-      display: block;
-      margin: 20px auto;
-    }
-
-    .wsp-float {
-      position: fixed;
-      width: 30px;
-      height: 30px;
-      bottom: 20px;
-      right: 20px;
-      background-color: var(--whatsapp);
-      border-radius: 50px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s;
-    }
-
-    .history-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-right: 15px;
-    }
-
-    .wsp-float:hover {
-      transform: scale(1.1);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .btn-contact {
-      text-decoration: none;
-      padding: 12px;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 0.9rem;
+    /* --- BADGES --- */
+    .badge-brand {
+      background: var(--primary);
       color: white;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 10px var(--primary-glow);
     }
 
-    /* Grid de Info técnica */
+    /* --- GRID TÉCNICO --- */
     .tech-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
       margin-top: 15px;
     }
-
     .tech-item {
-      background: rgba(15, 23, 42, 0.5);
-      padding: 10px;
-      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 14px;
+      border-radius: 16px;
+      border-left: 3px solid var(--primary);
+      text-align: left;
     }
+    .tech-label { font-size: 0.6rem; color: var(--text-muted); display: block; text-transform: uppercase; }
+    .tech-val { font-size: 1rem; font-weight: 700; color: #fff; display: block; }
 
-    .tech-label {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
+    /* ANIMACIÓN BORDES */
+    @keyframes goldGlow { 0%, 100% { border-color: var(--gold); } 50% { border-color: #fff; } }
+    @keyframes mayorGlow { 0%, 100% { border-color: var(--primary); } 50% { border-color: #ff6666; } }
+    @keyframes cyanGlow { 0%, 100% { border-color: var(--cyan); } 50% { border-color: #fff; } }
 
-    .tech-val {
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: block;
-    }
-
-    .iwsp {
-      width: 20px;
-      height: 20px;
-      margin-top: 6px;
-    }
+    .card-premium { border: 2px solid var(--gold); animation: goldGlow 4s infinite; background: linear-gradient(135deg, rgba(20,15,5,0.9), rgba(5,5,5,0.9)); }
+    .card-mayor { border: 2px solid var(--primary); animation: mayorGlow 4s infinite; }
+    .card-menor { border: 2px solid var(--cyan); animation: cyanGlow 4s infinite; background: linear-gradient(135deg, rgba(5,20,25,0.9), rgba(5,5,5,0.9)); }
   </style>
 </head>
 
 <body>
 
-  <a href="https://wa.me/50246577219" class="wsp-float" target="_blank" title="Agenda tu cita">
-    <span style="font-size: 1.2rem;"><img src="wsp.png" class="iwsp"></span>
-  </a>
-
   <div id="login" class="screen active">
-    <div class="container" style="text-align: center; padding-top: 40px;">
-      <img src="logo.png" class="logo" alt="Galvez Garage Logo">
+    <div class="container logo-container">
+      <img src="logo.png" class="logo-main" alt="Galvez Garage Logo">
       <h1>GALVEZ GARAGE</h1>
-      <p>Centro de Servicio Especializado</p>
+      <p style="text-align:center; color: var(--gold); font-weight: 700; letter-spacing: 3px; font-size: 0.8rem; text-transform: uppercase;">Taller de Motos de Elite Racing.</p>
 
-      <div style="margin-top: 40px;">
-        <input id="placaInput" placeholder="NÚMERO DE PLACA (Eje: M123ABC)" style="text-transform: uppercase;">
-        <button id="btnEntrar" onclick="entrar()">Consultar Mi Moto</button>
-        <button class="linkBtn" onclick="show('servicios')">Ver Servicios & Citas</button>
+      <div style="margin-top: 60px;">
+        <input id="placaInput" placeholder="M000XXX" style="text-transform: uppercase;">
+        <button id="btnEntrar" onclick="entrar()">Ver Mi Historial</button>
+        <button class="btn-servicios-main" onclick="show('servicios')">Explorar Servicios</button>
       </div>
     </div>
   </div>
 
   <div id="servicios" class="screen">
     <div class="container">
-      <button class="btn-back" onclick="show('login')">← VOLVER</button>
-      <h2>Servicios y Citas</h2>
-      <p>Mantenimiento profesional para tu motocicleta.</p>
-
-      <div class="card">
-        <img src="Mayor.png" class="img-card" alt="Servicio Mayor">
-        <h3 style="color: var(--primary);">Servicio Mayor</h3>
-        <p>Limpieza profunda, ajuste de válvulas y revisión de 25 puntos.</p>
-      </div>
-
-      <div class="card">
-        <img src="Menor.png" class="img-card" alt="Servicio Menor">
-        <h3>Servicio Menor</h3>
-        <p>Cambio de aceite, filtro y lubricación preventiva.</p>
-      </div>
-
-      <div class="card" style="border: 1px solid var(--primary);">
-        <h3 style="margin-top:0">Agenda tu Cita</h3>
-        <p>Escríbenos directamente para reservar tu espacio:</p>
-        <div class="contact-grid">
-          <a href="https://wa.me/50246577219" class="btn-contact" style="background: var(--whatsapp);">WhatsApp</a>
-          <a href="mailto:galvez.daniel2@icloud.com" class="btn-contact" style="background: #334155;">Correo</a>
+      <button style="width: auto; padding: 10px 20px; background: rgba(255,255,255,0.05); border:none;" onclick="show('login')">← VOLVER</button>
+      <h2 style="font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; margin-top: 30px;">Portafolio de Servicios</h2>
+      
+      <div class="card card-premium">
+        <div class="img-wrapper" style="border-color: var(--gold);"><img src="Premium.png" class="img-card"></div>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin:0; color: var(--gold); font-weight: 900;">SERVICIO PREMIUM</h3>
+          <span style="background: var(--gold); color:#000; padding:5px 10px; border-radius:8px; font-size:0.7rem; font-weight:900;">ELITE</span>
         </div>
+        <p style="font-size:0.85rem; color: #fff; margin-top: 10px;">Diagnóstico de competición, ajuste fino y detallado estético profundo.</p>
+        <button style="background: var(--gold); color: #000; margin-top:15px;" onclick="window.open('https://wa.me/50246577219?text=Hola! Deseo cotizar el Servicio PREMIUM', '_blank')">Cotizar Servicio Premium</button>
+      </div>
+
+      <div class="card card-mayor">
+        <div class="img-wrapper" style="border-color: var(--primary);"><img src="Mayor.png" class="img-card"></div>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin:0; color: var(--primary); font-weight: 800;">SERVICIO MAYOR</h3>
+          <span style="background: var(--primary); padding:5px 10px; border-radius:8px; font-size:0.7rem; font-weight:900;">PRO</span>
+        </div>
+        <p style="font-size:0.85rem; color: var(--text-muted); margin-top: 10px;">Limpieza ultrasónica, ajuste de válvulas y revisión de 25 puntos.</p>
+        <button style="background: var(--primary); margin-top:15px;" onclick="window.open('https://wa.me/50246577219?text=Hola! Deseo cotizar el Servicio MAYOR', '_blank')">Cotizar Servicio Mayor</button>
+      </div>
+
+      <div class="card card-menor">
+        <div class="img-wrapper" style="border-color: var(--cyan);"><img src="Menor.png" class="img-card"></div>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin:0; color: var(--cyan); font-weight: 800;">SERVICIO MENOR</h3>
+          <span style="background: var(--cyan); color:#000; padding:5px 10px; border-radius:8px; font-size:0.7rem; font-weight:900;">ESSENTIAL</span>
+        </div>
+        <p style="font-size:0.85rem; color: #fff; margin-top: 10px;">Lubricación, cambio de aceite y ajuste preventivo básico.</p>
+        <button style="background: var(--cyan); color: #000; box-shadow: 0 4px 15px var(--cyan-glow); margin-top:15px;" onclick="window.open('https://wa.me/50246577219?text=Hola! Deseo cotizar el Servicio MENOR', '_blank')">Cotizar Servicio Menor</button>
       </div>
     </div>
   </div>
 
   <div id="cliente" class="screen">
     <div class="container">
-      <button class="btn-back" onclick="location.reload()">← Regresar</button>
+      <button style="width: auto; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 12px;" onclick="location.reload()">← NUEVA CONSULTA</button>
       <div id="infoMoto"></div>
       <div id="historial"></div>
     </div>
@@ -294,37 +303,23 @@
 
   <div id="admin" class="screen">
     <div class="container">
-      <button class="btn-back" onclick="location.reload()">← SALIR PANEL</button>
-      <h2>Panel Administrativo</h2>
-
+      <button style="width: auto; padding: 10px 20px; background: var(--primary);" onclick="location.reload()">SALIR PANEL</button>
       <div class="card">
         <h3>Registrar Nueva Moto</h3>
-        <input id="placa" placeholder="Placa" style="text-transform: uppercase;">
-        <input id="clienteNombre" placeholder="Nombre del Cliente">
-        <input id="marca" placeholder="Marca (ej. Yamaha)">
-        <input id="modelo" placeholder="Modelo (ej. R6)">
+        <input id="placa" placeholder="PLACA" style="text-transform: uppercase;">
+        <input id="clienteNombre" placeholder="NOMBRE CLIENTE">
+        <div style="display:flex; gap:10px">
+          <input id="marca" placeholder="MARCA">
+          <input id="modelo" placeholder="MODELO">
+        </div>
         <div style="display:flex; gap:10px">
           <input id="hp" placeholder="HP">
-          <input id="torque" placeholder="Torque">
+          <input id="torque" placeholder="TORQUE">
         </div>
-        <input id="velocidad" placeholder="Velocidad Máxima">
-        <label style="font-size: 0.8rem; color:var(--text-muted)">Foto de la moto:</label>
+        <input id="velocidad" placeholder="TOP SPEED">
+        <label style="font-size:0.7rem; color:var(--primary); font-weight:700; margin-left: 10px;">FOTOGRAFÍA</label>
         <input type="file" id="foto" accept="image/*">
-        <button id="btnGuardar" onclick="guardarMoto()">Guardar en Base de Datos</button>
-      </div>
-
-      <div class="card" style="margin-bottom: 50px;">
-        <h3>Subir Reporte de Servicio</h3>
-        <input id="placaServicio" placeholder="Placa de la Moto" style="text-transform: uppercase;">
-        <select id="tipo">
-          <option>Servicio Mayor</option>
-          <option>Servicio Menor</option>
-          <option>Reparación Motor</option>
-          <option>Sistema Eléctrico</option>
-        </select>
-        <label style="font-size: 0.8rem; color:var(--text-muted)">Reporte PDF:</label>
-        <input type="file" id="pdf" accept="application/pdf">
-        <button id="btnSubir" onclick="subirServicio()">Adjuntar Servicio</button>
+        <button id="btnGuardar" onclick="guardarMoto()">Guardar Vehículo</button>
       </div>
     </div>
   </div>
@@ -356,13 +351,13 @@
         reader.onload = e => img.src = e.target.result;
         img.onload = () => {
           const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 600;
+          const MAX_WIDTH = 900;
           const scale = MAX_WIDTH / img.width;
           canvas.width = MAX_WIDTH;
           canvas.height = img.height * scale;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          resolve(canvas.toDataURL("image/png"));
+          resolve(canvas.toDataURL("image/jpeg", 0.7));
         };
         reader.readAsDataURL(file);
       });
@@ -379,78 +374,71 @@
 
     window.entrar = async function () {
       const btn = document.getElementById('btnEntrar');
-      const placa = document.getElementById('placaInput').value.toUpperCase();
-      if (!placa) return alert("Ingresa una placa");
+      const placa = document.getElementById('placaInput').value.toUpperCase().trim();
+      if (!placa) return alert("Ingrese identificación.");
       if (placa === ADMIN_CODE) { show('admin'); return; }
 
-      btn.innerText = "BUSCANDO...";
-      btn.disabled = true;
+      btn.innerText = "ACCEDIENDO..."; btn.disabled = true;
 
       try {
         const snap = await getDoc(doc(db, "motos", placa));
         if (!snap.exists()) {
-          alert("La placa no se encuentra registrada.");
-          btn.innerText = "Consultar Mi Moto";
-          btn.disabled = false;
+          alert("No registrado.");
+          btn.disabled = false; btn.innerText = "Ver Mi Historial";
           return;
         }
 
         const data = snap.data();
         document.getElementById("infoMoto").innerHTML = `
-          <div class="card">
-            ${data.foto ? `<img src="${data.foto}" class="img-card">` : ""}
-            <h2 style="margin-bottom:5px">${data.marca} ${data.modelo}</h2>
-            <span style="font-size:0.8rem; color:var(--text-muted)">Propietario: ${data.cliente}</span>
-            <div class="tech-grid">
-              <div class="tech-item"><span class="tech-label">Placa</span><span class="tech-val">${placa}</span></div>
-              <div class="tech-item"><span class="tech-label">Potencia</span><span class="tech-val">${data.hp} HP</span></div>
-              <div class="tech-item"><span class="tech-label">Torque</span><span class="tech-val">${data.torque}</span></div>
-              <div class="tech-item"><span class="tech-label">V. Máx</span><span class="tech-val">${data.velocidad}</span></div>
+          <div class="card" style="padding:0; overflow:hidden; border-color: var(--primary);">
+            <div class="img-wrapper" style="margin-bottom:0; border-radius:0; border:none;">
+              ${data.foto ? `<img src="${data.foto}" class="img-card">` : ""}
+            </div>
+            <div style="padding:24px">
+              <span class="badge-brand">${data.marca}</span>
+              <h2 style="margin:0; font-size: 1.8rem; letter-spacing: -1px;">${data.modelo}</h2>
+              <p style="margin:5px 0 20px 0; color:var(--text-muted); font-size:0.9rem">Propietario: <span style="color:#fff">${data.cliente}</span></p>
+              
+              <div class="tech-grid">
+                <div class="tech-item"><span class="tech-label">Placa</span><span class="tech-val">${placa}</span></div>
+                <div class="tech-item"><span class="tech-label">Potencia</span><span class="tech-val">${data.hp || '--'} HP</span></div>
+                <div class="tech-item"><span class="tech-label">Torque</span><span class="tech-val">${data.torque || '--'}</span></div>
+                <div class="tech-item"><span class="tech-label">Top Speed</span><span class="tech-val">${data.velocidad || '--'}</span></div>
+              </div>
             </div>
           </div>
         `;
 
-        let html = "<h2 style='margin-top:30px'>Historial</h2>";
+        let html = "<h2 style='margin:40px 0 15px 10px; font-size: 1.1rem; color: var(--primary); text-transform:uppercase;'>Historial Técnico</h2>";
         const servicios = await getDocs(query(collection(db, "motos", placa, "servicios"), orderBy("fecha", "desc")));
 
-        if (servicios.empty) html += "<p>Sin servicios registrados.</p>";
+        if (servicios.empty) html += "<p style='text-align:center; color:var(--text-muted)'>Sin reportes aún.</p>";
         servicios.forEach(doc => {
           const s = doc.data();
           html += `
-  <div class="card history-card">
-    <div style="flex: 1;">
-      <span style="font-size:0.7rem; color:var(--text-muted)">${s.fecha}</span>
-      <p style="margin:5px 0 0 0; font-weight:600; color:white">${s.tipo}</p>
-    </div>
-    <div style="margin-right: 10px;"> <a href="#" onclick="verPDF('${s.pdf}')" style="color:var(--accent-green); text-decoration:none; font-weight:700; white-space: nowrap;">
-        PDF 📄
-      </a>
-    </div>
-  </div>
-`;
+            <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:18px; margin-top:12px">
+              <div>
+                <span style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px">${s.fecha}</span>
+                <p style="margin:2px 0 0 0; font-weight:600">${s.tipo}</p>
+              </div>
+              <button class="btn-pdf" onclick="verPDF('${s.pdf}')">REPORTE 📄</button>
+            </div>
+          `;
         });
         document.getElementById("historial").innerHTML = html;
         show("cliente");
       } catch (e) {
-        alert("Error al consultar.");
+        alert("Error de red.");
       } finally {
-        btn.innerText = "Consultar Mi Moto";
-        btn.disabled = false;
+        btn.disabled = false; btn.innerText = "Ver Mi Historial";
       }
     }
 
     window.guardarMoto = async function () {
-      const btn = document.getElementById('btnGuardar');
-      const placa = document.getElementById('placa').value.toUpperCase();
+      const placa = document.getElementById('placa').value.toUpperCase().trim();
       const file = document.getElementById('foto').files[0];
-      if (!placa) return alert("Ingresa la placa");
-
-      btn.innerText = "GUARDANDO...";
-      btn.disabled = true;
-
-      let base64 = "";
-      if (file) base64 = await toBase64Image(file);
-
+      if (!placa) return alert("Placa obligatoria.");
+      let base64 = ""; if (file) base64 = await toBase64Image(file);
       await setDoc(doc(db, "motos", placa), {
         cliente: document.getElementById('clienteNombre').value,
         marca: document.getElementById('marca').value,
@@ -460,33 +448,7 @@
         velocidad: document.getElementById('velocidad').value,
         foto: base64
       });
-      alert("Moto registrada");
-      btn.innerText = "Guardar en Base de Datos";
-      btn.disabled = false;
-    }
-
-    window.subirServicio = async function () {
-      const btn = document.getElementById('btnSubir');
-      const placa = document.getElementById('placaServicio').value.toUpperCase();
-      const file = document.getElementById('pdf').files[0];
-      if (!file || !placa) return alert("Faltan datos");
-
-      btn.innerText = "SUBIENDO...";
-      btn.disabled = true;
-
-      const pdfBase64 = await toBase64PDF(file);
-      const hoy = new Date();
-      const fecha = hoy.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-      await addDoc(collection(db, "motos", placa, "servicios"), {
-        tipo: document.getElementById('tipo').value,
-        fecha: fecha,
-        pdf: pdfBase64
-      });
-
-      alert("Servicio cargado");
-      btn.innerText = "Adjuntar Servicio";
-      btn.disabled = false;
+      alert("Vehículo registrado exitosamente.");
     }
 
     window.verPDF = function (base64) {
