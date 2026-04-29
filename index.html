@@ -415,7 +415,7 @@
       try {
         const snap = await getDoc(doc(db, "motos", placa));
         if (!snap.exists()) {
-          showError("Parece que no se ha encontrado tu placa. Esta opción se habilita cuando haces tu primer servicio en Galvez Garage.");
+          showError("Parece que no se ha encontrado tu placa. Esta opción se habilita cuando haces tu primer servicio con Galvez Garage.");
           btn.disabled = false; btn.innerText = "Ver Mi Historial";
           return;
         }
