@@ -22,96 +22,112 @@
             background-color: var(--bg-dark);
             background-image: radial-gradient(circle at 50% -10%, #1e1b4b 0%, transparent 50%);
             color: var(--text-main);
-            margin: 0; padding: 20px; line-height: 1.6;
+            margin: 0; padding: 10px; line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .container { max-width: 1200px; margin: auto; }
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.03; z-index: -1;
+        }
 
-        /* MODALES */
+        .container { max-width: 1200px; margin: auto; padding: 10px; }
+
+        /* MODALES ADAPTATIVOS */
         #customAlert, #modalGestion {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 10000; backdrop-filter: blur(12px);
-            align-items: center; justify-content: center; overflow-y: auto; padding: 20px;
-            box-sizing: border-box;
+            align-items: flex-start; justify-content: center; overflow-y: auto; 
+            padding: 20px 10px; box-sizing: border-box;
         }
 
         .alert-box, .modal-content {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
-            padding: 30px; width: 100%; max-width: 650px; position: relative;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+            padding: 25px; width: 100%; max-width: 650px; position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); margin-top: 20px;
         }
 
-        h2, h3 { text-transform: uppercase; font-weight: 900; margin-top: 0; letter-spacing: -1px; }
-        h2 { color: var(--primary); font-style: italic; }
-        h3 { color: var(--gold); font-size: 1rem; border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 20px; }
+        h2, h3 { text-transform: uppercase; font-weight: 900; margin-top: 0; letter-spacing: -0.5px; }
+        h2 { color: var(--primary); font-style: italic; font-size: 1.5rem; }
+        h3 { color: var(--gold); font-size: 0.9rem; border-left: 4px solid var(--gold); padding-left: 12px; margin-bottom: 20px; }
 
-        label { display: block; font-size: 0.7rem; color: var(--text-muted); margin: 10px 0 5px 5px; text-transform: uppercase; font-weight: 800; }
+        label { display: block; font-size: 0.65rem; color: var(--text-muted); margin: 10px 0 5px 5px; text-transform: uppercase; font-weight: 800; }
 
         input, select, textarea {
-            width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 14px;
+            width: 100%; padding: 14px; margin-bottom: 10px; border-radius: 12px;
             border: 1px solid #27272a; background: rgba(0,0,0,0.3); color: white;
-            box-sizing: border-box; font-size: 1rem;
+            box-sizing: border-box; font-size: 0.95rem;
         }
 
         button {
-            width: 100%; padding: 18px; border-radius: 16px; border: none;
+            width: 100%; padding: 16px; border-radius: 14px; border: none;
             font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
 
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px var(--primary-glow); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 15px var(--primary-glow); }
         .btn-cyan { background: var(--cyan); color: white; }
-        .btn-outline { background: transparent; border: 1px solid #3f3f46; color: var(--text-muted); width: auto; padding: 10px 20px; font-size: 0.8rem; }
+        .btn-outline { background: transparent; border: 1px solid #3f3f46; color: var(--text-muted); width: auto; padding: 10px 15px; font-size: 0.75rem; }
 
-        /* INVENTARIO */
-        .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .moto-card {
-            background: rgba(255,255,255,0.03); border-radius: 24px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; cursor: pointer;
+        /* INVENTARIO RESPONSIVO */
+        .inventory-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+            gap: 15px; 
+            width: 100%;
         }
-        .moto-card:hover { border-color: var(--primary); transform: translateY(-8px); }
-        .moto-img { width: 100%; height: 180px; object-fit: cover; background: #222; }
-        .moto-info { padding: 20px; }
 
-        /* RESPONSIVE GRID */
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-        @media (max-width: 600px) { .grid-inputs { grid-template-columns: 1fr; } }
+        @media (max-width: 400px) {
+            .inventory-grid { grid-template-columns: 1fr; }
+        }
 
-        .close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-muted); cursor: pointer; font-size: 1.8rem; font-weight: 900; }
+        .moto-card {
+            background: rgba(255,255,255,0.03); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; cursor: pointer;
+        }
+        .moto-img { width: 100%; height: 160px; object-fit: cover; background: #222; }
+        .moto-info { padding: 15px; }
+
+        /* GRIDS DE FORMULARIO */
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
         
-        #loginSection { max-width: 400px; margin: 80px auto; text-align: center; padding: 40px; border-radius: 35px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); }
+        @media (max-width: 600px) { 
+            .grid-inputs { grid-template-columns: 1fr; gap: 0; }
+            h2 { font-size: 1.2rem; }
+            .modal-content { padding: 20px; }
+        }
+
+        .close-btn { position: absolute; top: 20px; right: 20px; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; }
+        
+        #loginSection { max-width: 380px; margin: 60px auto; text-align: center; padding: 35px; border-radius: 30px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <!-- MODAL ALERTAS -->
+    <!-- MODALES -->
     <div id="customAlert">
         <div class="alert-box">
             <h3 id="alertTitle">SISTEMA</h3>
-            <p id="alertMsg"></p>
+            <p id="alertMsg" style="font-size: 0.9rem;"></p>
             <button onclick="closeAlert()" class="btn-primary">ENTENDIDO</button>
         </div>
     </div>
 
-    <!-- MODAL GESTIÓN COMPLETA -->
     <div id="modalGestion">
         <div class="modal-content">
             <span class="close-btn" onclick="cerrarModal()">&times;</span>
-            <h2 id="modalPlacaTitulo">REGISTRAR MOTO</h2>
+            <h2 id="modalPlacaTitulo">GESTIÓN</h2>
             
-            <div id="statusAlertas" style="margin-bottom: 20px; padding: 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; text-align: center; display: none;"></div>
+            <div id="statusAlertas" style="margin-bottom: 20px; padding: 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; text-align: center; display: none;"></div>
 
-            <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                <button class="btn-outline" id="btnTabDatos" onclick="showTab('tabDatos')">Ficha Técnica</button>
-                <button class="btn-outline" id="btnTabServicio" onclick="showTab('tabServicio')">Servicios PDF</button>
+            <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                <button class="btn-outline" id="btnTabDatos" onclick="showTab('tabDatos')">Ficha</button>
+                <button class="btn-outline" id="btnTabServicio" onclick="showTab('tabServicio')">Servicio</button>
             </div>
 
-            <!-- Tab 1: Datos y Foto -->
             <div id="tabDatos" class="tab-content">
-                <label>Identificación</label>
-                <input id="edit_placa" placeholder="PLACA (M123ABC)" style="text-transform: uppercase; font-weight: 900; color: var(--cyan);">
-                <input id="edit_cliente" placeholder="Nombre completo del cliente">
-                
-                <label>Especificaciones</label>
+                <input id="edit_placa" placeholder="PLACA" style="text-transform: uppercase;">
+                <input id="edit_cliente" placeholder="Cliente">
                 <div class="grid-inputs">
                     <input id="edit_marca" placeholder="Marca">
                     <input id="edit_modelo" placeholder="Modelo">
@@ -122,55 +138,48 @@
                     <input id="edit_torque" placeholder="Torque">
                     <input id="edit_kmActual" placeholder="Km Actual">
                 </div>
-                <input id="edit_kmProximo" placeholder="Km para Próximo Servicio" style="border-color: var(--gold);">
-                
-                <label>Imagen del Vehículo</label>
-                <input type="file" id="edit_foto" accept="image/*" style="font-size: 0.8rem;">
-                
-                <button class="btn-primary" onclick="guardarCambiosMoto()">Guardar en Base de Datos</button>
+                <input id="edit_kmProximo" placeholder="Próximo Servicio" style="border-color: var(--gold);">
+                <label>Foto</label>
+                <input type="file" id="edit_foto" accept="image/*">
+                <button class="btn-primary" onclick="guardarCambiosMoto()">Guardar</button>
             </div>
 
-            <!-- Tab 2: Subir PDF -->
             <div id="tabServicio" class="tab-content" style="display:none;">
-                <label>Tipo de Mantenimiento</label>
                 <select id="s_tipo">
                     <option>Servicio Premium</option>
                     <option>Servicio Mayor</option>
                     <option>Servicio Menor</option>
-                    <option>Reparación Motor</option>
                 </select>
-                <label>Costo Total (Q)</label>
-                <input id="s_costo" type="number" placeholder="Ej: 450.00">
-                <label>Archivo de Reporte</label>
+                <input id="s_costo" type="number" placeholder="Costo Q">
                 <input type="file" id="s_pdf" accept="application/pdf">
-                <button class="btn-cyan" onclick="subirServicioFinal()">Guardar Reporte Técnico</button>
+                <button class="btn-cyan" onclick="subirServicioFinal()">Subir Reporte</button>
             </div>
         </div>
     </div>
 
     <div class="container">
         <div id="loginSection">
-            <img src="logo.png" style="width: 140px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--primary-glow));">
-            <h2>Acceso Taller</h2>
-            <input type="email" id="adminEmail" placeholder="Correo">
-            <input type="password" id="adminPass" placeholder="Contraseña">
-            <button class="btn-primary" onclick="login()">Entrar al Panel</button>
+            <img src="logo.png" style="width: 120px; margin-bottom: 20px;">
+            <h2>Admin</h2>
+            <input type="email" id="adminEmail" placeholder="Email">
+            <input type="password" id="adminPass" placeholder="Pass">
+            <button class="btn-primary" onclick="login()">Entrar</button>
         </div>
 
         <div id="adminContent">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
-                <div>
-                    <h2 style="margin:0;">Dashboard Galvez Garage</h2>
-                    <p style="color:var(--cyan); font-weight: 900; margin: 5px 0 0 0;" id="mesIngreso">Calculando ingresos...</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <h2 style="margin:0; font-size: 1.4rem;">Galvez Garage</h2>
+                    <p style="color:var(--cyan); font-weight: 900; font-size: 0.8rem;" id="mesIngreso">Q 0.00 (Mes)</p>
                 </div>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn-primary" style="width: auto; padding: 12px 25px;" onclick="nuevaMoto()">+ Registrar Moto</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-primary" style="width: auto; padding: 8px 15px; font-size: 0.75rem;" onclick="nuevaMoto()">+ Moto</button>
                     <button class="btn-outline" onclick="logout()">Salir</button>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>Inventario de Motocicletas</h3>
+            <div class="card" style="padding: 15px;">
+                <h3 style="font-size: 0.8rem;">Inventario</h3>
                 <div id="listaMotos" class="inventory-grid"></div>
             </div>
         </div>
@@ -216,7 +225,7 @@
 
         window.login = async () => {
             try { await signInWithEmailAndPassword(auth, document.getElementById('adminEmail').value, document.getElementById('adminPass').value); }
-            catch (e) { showAlert("Credenciales inválidas."); }
+            catch (e) { showAlert("Error."); }
         };
         window.logout = () => signOut(auth);
 
@@ -230,12 +239,13 @@
                     <div class="moto-card" onclick="abrirGestion('${doc.id}')">
                         <img src="${data.foto || 'logo.png'}" class="moto-img">
                         <div class="moto-info">
-                            <b>${doc.id}</b><br><small style="color:var(--text-muted)">${data.cliente}</small>
+                            <b style="color:var(--primary); font-size: 0.9rem;">${doc.id}</b><br>
+                            <small style="color:var(--text-muted); font-size: 0.75rem;">${data.cliente}</small>
                         </div>
                     </div>
                 `;
             });
-            lista.innerHTML = html || "<p>No hay motos registradas.</p>";
+            lista.innerHTML = html || "<p>Vacío.</p>";
         }
 
         window.abrirGestion = async (id) => {
@@ -243,7 +253,7 @@
             const snap = await getDoc(doc(db, "motos", id));
             const data = snap.data();
             
-            document.getElementById('modalPlacaTitulo').innerText = "GESTIONAR: " + id;
+            document.getElementById('modalPlacaTitulo').innerText = id;
             document.getElementById('edit_placa').value = id;
             document.getElementById('edit_placa').disabled = true;
             document.getElementById('edit_cliente').value = data.cliente || "";
@@ -258,12 +268,10 @@
             const status = document.getElementById('statusAlertas');
             status.style.display = 'block';
             if (data.fcmToken) {
-                status.innerText = "NOTIFICACIONES ACTIVAS ✅";
-                status.style.background = "rgba(12, 192, 223, 0.1)";
+                status.innerText = "NOTIFICACIONES: ACTIVAS ✅";
                 status.style.color = "var(--cyan)";
             } else {
-                status.innerText = "NOTIFICACIONES INACTIVAS ❌";
-                status.style.background = "rgba(255, 0, 51, 0.1)";
+                status.innerText = "NOTIFICACIONES: INACTIVAS ❌";
                 status.style.color = "var(--primary)";
             }
 
@@ -276,7 +284,7 @@
             modoEdicion = false;
             document.querySelectorAll('#modalGestion input').forEach(i => i.value = "");
             document.getElementById('edit_placa').disabled = false;
-            document.getElementById('modalPlacaTitulo').innerText = "REGISTRAR NUEVA MOTO";
+            document.getElementById('modalPlacaTitulo').innerText = "NUEVA MOTO";
             document.getElementById('statusAlertas').style.display = 'none';
             document.getElementById('btnTabServicio').style.display = 'none';
             document.getElementById('modalGestion').style.display = 'flex';
@@ -292,7 +300,7 @@
 
         window.guardarCambiosMoto = async () => {
             const placa = document.getElementById('edit_placa').value.toUpperCase().trim();
-            if (!placa) return showAlert("La placa es obligatoria.");
+            if (!placa) return showAlert("Placa requerida.");
 
             const file = document.getElementById('edit_foto').files[0];
             let base64 = "";
@@ -314,7 +322,7 @@
             if(base64) data.foto = base64;
 
             await setDoc(doc(db, "motos", placa), data, { merge: true });
-            showAlert(modoEdicion ? "Datos actualizados." : "Moto registrada con éxito.");
+            showAlert("Guardado.");
             cerrarModal();
             cargarInventario();
         };
@@ -323,7 +331,7 @@
             const placa = document.getElementById('edit_placa').value;
             const file = document.getElementById('s_pdf').files[0];
             const costo = parseFloat(document.getElementById('s_costo').value);
-            if (!file || isNaN(costo)) return showAlert("Falta el PDF o el costo.");
+            if (!file || isNaN(costo)) return showAlert("Datos incompletos.");
             
             const reader = new FileReader();
             const pdfBase = await new Promise(r => { reader.onload = e => r(e.target.result); reader.readAsDataURL(file); });
@@ -336,7 +344,7 @@
                 timestamp: new Date()
             });
 
-            showAlert("Servicio guardado. Recuerda enviar la notificación desde Firebase.");
+            showAlert("Servicio guardado.");
             cerrarModal();
             calcularIngresos();
         };
@@ -352,7 +360,7 @@
                     if(d.timestamp && d.timestamp.toDate().getMonth() === mesActual) total += (d.costo || 0);
                 });
             }
-            document.getElementById('mesIngreso').innerText = "Q " + total.toLocaleString('es-GT', {minimumFractionDigits: 2}) + " (Mes Actual)";
+            document.getElementById('mesIngreso').innerText = "Q " + total.toLocaleString('es-GT', {minimumFractionDigits: 2});
         }
     </script>
 </body>
