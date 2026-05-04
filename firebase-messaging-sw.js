@@ -4,7 +4,7 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 firebase.initializeApp({
   apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
   projectId: "reports-e956a",
-  messagingSenderId: "951475324680" // Cambia este número por tu Sender ID real
+  messagingSenderId: "1058914487818" // Cambia este número por tu Sender ID real
 });
 
 const messaging = firebase.messaging();
