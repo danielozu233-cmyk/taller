@@ -274,6 +274,10 @@
             <input id="placaInput" placeholder="M000XXX" style="text-transform: uppercase;">
             <button id="btnEntrar" onclick="entrar()">Ver Mi Historial</button>
         </div>
+        <button id="btnNotificaciones" onclick="activarNotificaciones()" 
+        style="background: linear-gradient(135deg, #0cc0df 0%, #064e5a 100%); margin-top: 10px; font-size: 0.8rem;">
+    🔔 ACTIVAR AVISOS DE MI MOTO
+</button>
 
         <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 20px; line-height: 1.4;">
             La opción para ver historial de servicios y ficha técnica de la moto solo está disponible a partir de tu primer servicio en Galvez Garage.
@@ -517,6 +521,37 @@
       const blob = new Blob([byteArray], { type: 'application/pdf' });
       window.open(URL.createObjectURL(blob), '_blank');
     }
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+const messaging = getMessaging(app);
+
+window.activarNotificaciones = async function() {
+  const placa = document.getElementById('placaInput').value.toUpperCase().trim();
+  
+  if (!placa) {
+    showError("Primero ingresa tu placa para vincular los avisos.");
+    return;
+  }
+
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      // Reemplaza 'TU_CLAVE_VAPID_PUBLICA' con la que generas en la consola de Firebase
+      const token = await getToken(messaging, { vapidKey: 'TU_CLAVE_VAPID_PUBLICA' });
+      
+      if (token) {
+        // Guardamos el token en el documento de la moto para poder enviarle mensajes después
+        await setDoc(doc(db, "motos", placa), { fcmToken: token }, { merge: true });
+        alert("¡Listo! Te avisaremos por aquí cuando tu moto esté lista o necesite servicio.");
+      }
+    } else {
+      showError("Se requiere permiso para enviarte alertas.");
+    }
+  } catch (error) {
+    console.error("Error en Messaging:", error);
+    showError("No se pudo activar el servicio de alertas.");
+  }
+}
   </script>
 </body>
 
