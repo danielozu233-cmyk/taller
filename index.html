@@ -490,14 +490,23 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
     const firebaseConfig = {
-      apiKey: "AIzaSyCKRB49LOhaR79NI8CwypqCMf_10GHd77k",
-      authDomain: "reports-e956a.firebaseapp.com",
-      projectId: "reports-e956a"
+      apiKey: "AIzaSyCKrf4w-Djjrj2wAjgvaRauADxfcQWp5Do",
+      authDomain: "tallerggalvez.firebaseapp.com",
+      projectId: "tallerggalvez",
+      storageBucket: "tallerggalvez.firebasestorage.app",
+      messagingSenderId: "760556347227",
+      appId: "1:760556347227:web:78f0fb1ff89cc37133447e",
+      measurementId: "G-EVT5M54BXN"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const messaging = getMessaging(app);
+    const analytics = getAnalytics(app);
+
     const ADMIN_CODE = "ADMIN123";
 
     window.show = function (screen) {
@@ -505,8 +514,6 @@
       document.getElementById(screen).classList.add('active');
       window.scrollTo(0, 0);
     }
-
-    const messaging = getMessaging(app);
 
     window.activarNotificaciones = async function () {
       const placa = document.getElementById('placaInput').value.toUpperCase().trim();
@@ -520,7 +527,7 @@
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           // Reemplaza 'TU_CLAVE_VAPID_PUBLICA' con la que generas en la consola de Firebase
-          const token = await getToken(messaging, { vapidKey: 'NHfv63WHbOuKjm7hXxs_QdaTWBqnT7PIP35lnGJi_Y4' });
+          const token = await getToken(messaging, { vapidKey: 'BBUdr6mN6WFnTkAD9g5hUjoFtl1E7R5UBP-5sr1lkZTqJbwttvPYvAC7tkfMTkoFFQzr757ZqEcAyZPrkon1In4' });
 
           if (token) {
             // Guardamos el token en el documento de la moto para poder enviarle mensajes después
