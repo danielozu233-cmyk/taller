@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard | Galvez Garage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0033;
+            --primary-glow: rgba(255, 0, 51, 0.5);
+            --gold: #d4af37;
+            --cyan: #0cc0df;
+            --bg-dark: #08080a;
+            --card-bg: rgba(18, 18, 23, 0.95);
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% -10%, #1e1b4b 0%, transparent 50%);
+            color: var(--text-main);
+            margin: 0; padding: 20px; line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: auto; }
+
+        /* MODALES */
+        #customAlert, #modalGestion {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 10000; backdrop-filter: blur(12px);
+            align-items: center; justify-content: center; overflow-y: auto; padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .alert-box, .modal-content {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
+            padding: 30px; width: 100%; max-width: 650px; position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        h2, h3 { text-transform: uppercase; font-weight: 900; margin-top: 0; letter-spacing: -1px; }
+        h2 { color: var(--primary); font-style: italic; }
+        h3 { color: var(--gold); font-size: 1rem; border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 20px; }
+
+        label { display: block; font-size: 0.7rem; color: var(--text-muted); margin: 10px 0 5px 5px; text-transform: uppercase; font-weight: 800; }
+
+        input, select, textarea {
+            width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 14px;
+            border: 1px solid #27272a; background: rgba(0,0,0,0.3); color: white;
+            box-sizing: border-box; font-size: 1rem;
+        }
+
+        button {
+            width: 100%; padding: 18px; border-radius: 16px; border: none;
+            font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px var(--primary-glow); }
+        .btn-cyan { background: var(--cyan); color: white; }
+        .btn-outline { background: transparent; border: 1px solid #3f3f46; color: var(--text-muted); width: auto; padding: 10px 20px; font-size: 0.8rem; }
+
+        /* INVENTARIO */
+        .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .moto-card {
+            background: rgba(255,255,255,0.03); border-radius: 24px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; cursor: pointer;
+        }
+        .moto-card:hover { border-color: var(--primary); transform: translateY(-8px); }
+        .moto-img { width: 100%; height: 180px; object-fit: cover; background: #222; }
+        .moto-info { padding: 20px; }
+
+        /* RESPONSIVE GRID */
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .grid-inputs { grid-template-columns: 1fr; } }
+
+        .close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-muted); cursor: pointer; font-size: 1.8rem; font-weight: 900; }
+        
+        #loginSection { max-width: 400px; margin: 80px auto; text-align: center; padding: 40px; border-radius: 35px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL ALERTAS -->
+    <div id="customAlert">
+        <div class="alert-box">
+            <h3 id="alertTitle">SISTEMA</h3>
+            <p id="alertMsg"></p>
+            <button onclick="closeAlert()" class="btn-primary">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <!-- MODAL GESTIÓN COMPLETA -->
+    <div id="modalGestion">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+            <h2 id="modalPlacaTitulo">REGISTRAR MOTO</h2>
+            
+            <div id="statusAlertas" style="margin-bottom: 20px; padding: 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; text-align: center; display: none;"></div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                <button class="btn-outline" id="btnTabDatos" onclick="showTab('tabDatos')">Ficha Técnica</button>
+                <button class="btn-outline" id="btnTabServicio" onclick="showTab('tabServicio')">Servicios PDF</button>
+            </div>
+
+            <!-- Tab 1: Datos y Foto -->
+            <div id="tabDatos" class="tab-content">
+                <label>Identificación</label>
+                <input id="edit_placa" placeholder="PLACA (M123ABC)" style="text-transform: uppercase; font-weight: 900; color: var(--cyan);">
+                <input id="edit_cliente" placeholder="Nombre completo del cliente">
+                
+                <label>Especificaciones</label>
+                <div class="grid-inputs">
+                    <input id="edit_marca" placeholder="Marca">
+                    <input id="edit_modelo" placeholder="Modelo">
+                    <input id="edit_velocidad" placeholder="Top Speed">
+                </div>
+                <div class="grid-inputs">
+                    <input id="edit_hp" placeholder="HP">
+                    <input id="edit_torque" placeholder="Torque">
+                    <input id="edit_kmActual" placeholder="Km Actual">
+                </div>
+                <input id="edit_kmProximo" placeholder="Km para Próximo Servicio" style="border-color: var(--gold);">
+                
+                <label>Imagen del Vehículo</label>
+                <input type="file" id="edit_foto" accept="image/*" style="font-size: 0.8rem;">
+                
+                <button class="btn-primary" onclick="guardarCambiosMoto()">Guardar en Base de Datos</button>
+            </div>
+
+            <!-- Tab 2: Subir PDF -->
+            <div id="tabServicio" class="tab-content" style="display:none;">
+                <label>Tipo de Mantenimiento</label>
+                <select id="s_tipo">
+                    <option>Servicio Premium</option>
+                    <option>Servicio Mayor</option>
+                    <option>Servicio Menor</option>
+                    <option>Reparación Motor</option>
+                </select>
+                <label>Costo Total (Q)</label>
+                <input id="s_costo" type="number" placeholder="Ej: 450.00">
+                <label>Archivo de Reporte</label>
+                <input type="file" id="s_pdf" accept="application/pdf">
+                <button class="btn-cyan" onclick="subirServicioFinal()">Guardar Reporte Técnico</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="loginSection">
+            <img src="logo.png" style="width: 140px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--primary-glow));">
+            <h2>Acceso Taller</h2>
+            <input type="email" id="adminEmail" placeholder="Correo">
+            <input type="password" id="adminPass" placeholder="Contraseña">
+            <button class="btn-primary" onclick="login()">Entrar al Panel</button>
+        </div>
+
+        <div id="adminContent">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2 style="margin:0;">Dashboard Galvez Garage</h2>
+                    <p style="color:var(--cyan); font-weight: 900; margin: 5px 0 0 0;" id="mesIngreso">Calculando ingresos...</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn-primary" style="width: auto; padding: 12px 25px;" onclick="nuevaMoto()">+ Registrar Moto</button>
+                    <button class="btn-outline" onclick="logout()">Salir</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Inventario de Motocicletas</h3>
+                <div id="listaMotos" class="inventory-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKrf4w-Djjrj2wAjgvaRauADxfcQWp5Do",
+            authDomain: "tallerggalvez.firebaseapp.com",
+            projectId: "tallerggalvez",
+            storageBucket: "tallerggalvez.firebasestorage.app",
+            messagingSenderId: "760556347227",
+            appId: "1:760556347227:web:78f0fb1ff89cc37133447e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let modoEdicion = false;
+
+        window.showAlert = (msg, title = "SISTEMA") => {
+            document.getElementById('alertMsg').innerText = msg;
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('customAlert').style.display = 'flex';
+        };
+        window.closeAlert = () => document.getElementById('customAlert').style.display = 'none';
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                cargarInventario();
+                calcularIngresos();
+            } else {
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('adminContent').style.display = 'none';
+            }
+        });
+
+        window.login = async () => {
+            try { await signInWithEmailAndPassword(auth, document.getElementById('adminEmail').value, document.getElementById('adminPass').value); }
+            catch (e) { showAlert("Credenciales inválidas."); }
+        };
+        window.logout = () => signOut(auth);
+
+        async function cargarInventario() {
+            const lista = document.getElementById('listaMotos');
+            const snap = await getDocs(query(collection(db, "motos"), orderBy("cliente")));
+            let html = "";
+            snap.forEach(doc => {
+                const data = doc.data();
+                html += `
+                    <div class="moto-card" onclick="abrirGestion('${doc.id}')">
+                        <img src="${data.foto || 'logo.png'}" class="moto-img">
+                        <div class="moto-info">
+                            <b>${doc.id}</b><br><small style="color:var(--text-muted)">${data.cliente}</small>
+                        </div>
+                    </div>
+                `;
+            });
+            lista.innerHTML = html || "<p>No hay motos registradas.</p>";
+        }
+
+        window.abrirGestion = async (id) => {
+            modoEdicion = true;
+            const snap = await getDoc(doc(db, "motos", id));
+            const data = snap.data();
+            
+            document.getElementById('modalPlacaTitulo').innerText = "GESTIONAR: " + id;
+            document.getElementById('edit_placa').value = id;
+            document.getElementById('edit_placa').disabled = true;
+            document.getElementById('edit_cliente').value = data.cliente || "";
+            document.getElementById('edit_marca').value = data.marca || "";
+            document.getElementById('edit_modelo').value = data.modelo || "";
+            document.getElementById('edit_hp').value = data.hp || "";
+            document.getElementById('edit_torque').value = data.torque || "";
+            document.getElementById('edit_kmActual').value = data.kmActual || "";
+            document.getElementById('edit_kmProximo').value = data.kmProximo || "";
+            document.getElementById('edit_velocidad').value = data.velocidad || "";
+
+            const status = document.getElementById('statusAlertas');
+            status.style.display = 'block';
+            if (data.fcmToken) {
+                status.innerText = "NOTIFICACIONES ACTIVAS ✅";
+                status.style.background = "rgba(12, 192, 223, 0.1)";
+                status.style.color = "var(--cyan)";
+            } else {
+                status.innerText = "NOTIFICACIONES INACTIVAS ❌";
+                status.style.background = "rgba(255, 0, 51, 0.1)";
+                status.style.color = "var(--primary)";
+            }
+
+            document.getElementById('btnTabServicio').style.display = 'block';
+            document.getElementById('modalGestion').style.display = 'flex';
+            showTab('tabDatos');
+        };
+
+        window.nuevaMoto = () => {
+            modoEdicion = false;
+            document.querySelectorAll('#modalGestion input').forEach(i => i.value = "");
+            document.getElementById('edit_placa').disabled = false;
+            document.getElementById('modalPlacaTitulo').innerText = "REGISTRAR NUEVA MOTO";
+            document.getElementById('statusAlertas').style.display = 'none';
+            document.getElementById('btnTabServicio').style.display = 'none';
+            document.getElementById('modalGestion').style.display = 'flex';
+            showTab('tabDatos');
+        };
+
+        window.cerrarModal = () => document.getElementById('modalGestion').style.display = 'none';
+
+        window.showTab = (tabId) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+        };
+
+        window.guardarCambiosMoto = async () => {
+            const placa = document.getElementById('edit_placa').value.toUpperCase().trim();
+            if (!placa) return showAlert("La placa es obligatoria.");
+
+            const file = document.getElementById('edit_foto').files[0];
+            let base64 = "";
+            if (file) {
+                const reader = new FileReader();
+                base64 = await new Promise(r => { reader.onload = e => r(e.target.result); reader.readAsDataURL(file); });
+            }
+
+            const data = {
+                cliente: document.getElementById('edit_cliente').value,
+                marca: document.getElementById('edit_marca').value,
+                modelo: document.getElementById('edit_modelo').value,
+                hp: document.getElementById('edit_hp').value,
+                torque: document.getElementById('edit_torque').value,
+                kmActual: document.getElementById('edit_kmActual').value,
+                kmProximo: document.getElementById('edit_kmProximo').value,
+                velocidad: document.getElementById('edit_velocidad').value
+            };
+            if(base64) data.foto = base64;
+
+            await setDoc(doc(db, "motos", placa), data, { merge: true });
+            showAlert(modoEdicion ? "Datos actualizados." : "Moto registrada con éxito.");
+            cerrarModal();
+            cargarInventario();
+        };
+
+        window.subirServicioFinal = async () => {
+            const placa = document.getElementById('edit_placa').value;
+            const file = document.getElementById('s_pdf').files[0];
+            const costo = parseFloat(document.getElementById('s_costo').value);
+            if (!file || isNaN(costo)) return showAlert("Falta el PDF o el costo.");
+            
+            const reader = new FileReader();
+            const pdfBase = await new Promise(r => { reader.onload = e => r(e.target.result); reader.readAsDataURL(file); });
+
+            await addDoc(collection(db, "motos", placa, "servicios"), {
+                tipo: document.getElementById('s_tipo').value,
+                fecha: new Date().toLocaleDateString('es-ES'),
+                costo: costo,
+                pdf: pdfBase,
+                timestamp: new Date()
+            });
+
+            showAlert("Servicio guardado. Recuerda enviar la notificación desde Firebase.");
+            cerrarModal();
+            calcularIngresos();
+        };
+
+        async function calcularIngresos() {
+            let total = 0;
+            const mesActual = new Date().getMonth();
+            const snapMotos = await getDocs(collection(db, "motos"));
+            for (const m of snapMotos.docs) {
+                const snapServs = await getDocs(collection(db, "motos", m.id, "servicios"));
+                snapServs.forEach(s => {
+                    const d = s.data();
+                    if(d.timestamp && d.timestamp.toDate().getMonth() === mesActual) total += (d.costo || 0);
+                });
+            }
+            document.getElementById('mesIngreso').innerText = "Q " + total.toLocaleString('es-GT', {minimumFractionDigits: 2}) + " (Mes Actual)";
+        }
+    </script>
+</body>
+</html>
